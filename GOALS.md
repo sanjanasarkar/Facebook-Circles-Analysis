@@ -21,9 +21,5 @@ This algorithm will be used to find the shortest path and degrees of separation 
 
 This will be used to determine which Facebook pages a user is most likely to end up on if they randomly click on pages. The purpose of doing this is to understand how popular different pages are. The page rank algorithm will return a probability distribution which details which pages a user is more likely to end up on. Pages with higher probabilities are considered to be more popular.
 
-Signed,
-Pranav Goel
-Shiven Kumar
-Ben Xie
-Sanjana Sarkar
+Signed, Pranav Goel, Shiven Kumar, Ben Xie, Sanjana Sarkar
 
