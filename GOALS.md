@@ -7,7 +7,7 @@ This dataset contains friends lists of people on Facebook. This will let us see 
 
 ### Planned Implementation:
 
-We plan to use an undirected graph, using an adjacency matrix. Since we will not be adding or removing nodes frequently, the slower running time of these operations will be irrelevant. We will need fast lookups, especially since the shortest-path algorithm is O(n3). The Google Page Rank algorithm also needs the Markov matrix, which can easily be obtained from the adjacency matrix.
+We plan to use an undirected graph, using an adjacency matrix. Since we will not be adding or removing nodes frequently, the slower running time of these operations will be irrelevant. We will need fast lookups, especially since the shortest-path algorithm is O(n^3). The Google Page Rank algorithm also needs the Markov matrix, which can easily be obtained from the adjacency matrix.
 
 ### Traversal: BFS - Breadth First Traversal
 
@@ -15,7 +15,7 @@ We chose the BFS traversal because it would allow us to easily display friends i
 
 ### Algorithm #1: Shortest Path: Floyd-Warshall Algorithm
 
-This algorithm will be used to find the shortest path and degrees of separation between any two people in the graph/social network. It is O(n3), but because we are planning on using an adjacency matrix, we have fast lookups.
+This algorithm will be used to find the shortest path and degrees of separation between any two people in the graph/social network. It is O(n^3), but because we are planning on using an adjacency matrix, we have fast lookups.
 
 ### Algorithm #2 (Complex): Google Page Rank Algorithm
 
