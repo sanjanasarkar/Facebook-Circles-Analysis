@@ -9,7 +9,7 @@ using std::vector;
 
 typedef int Vertex;
 
-// A simple undirected graph
+// A simple directed graph
 class Graph {
 
     public:
