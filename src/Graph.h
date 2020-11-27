@@ -31,11 +31,19 @@ class Graph {
             }
         };
 
-        Graph(vector<Edge>& edges, size_t num_nodes);
+        // ONE node per line
+        Graph(const vector<string>& lines);
+
+        Graph(const vector<Edge>& edges, size_t num_nodes);
 
         friend std::ostream& operator<<(std::ostream& out, const Graph& g);
 
+        friend bool operator==(const Graph& lhs, const Graph& rhs);
+        inline friend bool operator!=(const Graph& lhs, const Graph& rhs) { return !(lhs == rhs); }
+
     private:
         vector<vector<double>> matrix_;
+
+        void __init(const vector<Edge>& edges, size_t num_nodes);
 
 };
