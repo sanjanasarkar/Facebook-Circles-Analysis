@@ -28,6 +28,36 @@ Graph::Graph(const vector<Edge>& edges, size_t num_nodes) {
     __init(edges, num_nodes);
 }
 
+bool Graph::areConnected(const Edge& e) {
+    return areConnected(e.start, e.end);
+}
+
+bool Graph::areConnected(Vertex start, Vertex end) {
+    if (start >= matrix_.size() || end >= matrix_.size())
+        return false;
+    return (matrix_[start][end] != 0);
+}
+
+void Graph::changeWeight(const Edge& e) {
+    changeWeight(e.start, e.end, e.weight);
+}
+
+void Graph::changeWeight(Vertex start, Vertex end, double weight) {
+    if (start > matrix_.size() || end >= matrix_.size())
+        return;
+    matrix_[start][end] = weight;
+}
+
+double Graph::getWeight(const Edge& e) {
+    return getWeight(e.start, e.end);
+}
+
+double Graph::getWeight(Vertex start, Vertex end) {
+    if (!areConnected(start, end))
+        return 0;
+    return matrix_[start][end];
+}
+
 bool operator==(const Graph& lhs, const Graph& rhs) {
     if (lhs.matrix_.size() != rhs.matrix_.size() || lhs.matrix_[0].size() != rhs.matrix_.size()) {
         return false;
