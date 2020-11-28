@@ -58,6 +58,30 @@ double Graph::getWeight(Vertex start, Vertex end) {
     return matrix_[start][end];
 }
 
+vector<Graph::Edge> Graph::getOutgoingEdges(Vertex start) {
+    vector<Edge> edges;
+    if (start >= matrix_.size())
+        return edges;
+
+    for (size_t j = 0; j < matrix_[start].size(); ++j) {
+        if (matrix_[start][j] != 0)
+            edges.emplace_back(start, j, matrix_[start][j]);
+    }
+    return edges;
+}
+
+vector<Graph::Edge> Graph::getIncomingEdges(Vertex end) {
+    vector<Edge> edges;
+    if (end >= matrix_.size())
+        return edges;
+
+    for (size_t i = 0; i < matrix_.size(); i++) {
+        if (matrix_[i][end] != 0)
+            edges.emplace_back(i, end, matrix_[i][end]);
+    }
+    return edges;
+}
+
 bool operator==(const Graph& lhs, const Graph& rhs) {
     if (lhs.matrix_.size() != rhs.matrix_.size() || lhs.matrix_[0].size() != rhs.matrix_.size()) {
         return false;

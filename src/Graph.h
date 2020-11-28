@@ -76,6 +76,16 @@ class Graph {
          */
         double getWeight(Vertex start, Vertex end);
 
+        /**
+         * Returns a Vector of the outgoing Edges from node start. Empty list if no edges, OR if start doesn't exist.
+         */
+        vector<Edge> getOutgoingEdges(Vertex start);
+
+        /**
+         * Returns a Vector of the incoming Edges to node start. Empty list if no edges, OR if end doesn't exist.
+         */
+        vector<Edge> getIncomingEdges(Vertex end);
+
         inline size_t getSize() { return matrix_.size(); }
         inline Vertex getMaxVertex() { return getSize(); }
 
