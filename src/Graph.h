@@ -35,6 +35,10 @@ class Graph {
                 out << "{" << e.start << ", " << e.end << " : " << e.weight << "}";
                 return out;
             }
+            
+            friend bool operator==(const Edge& a, const Edge& b) {
+                return a.start == b.start && a.end == b.end && a.weight == b.weight;   
+            }
         };
 
         /**
