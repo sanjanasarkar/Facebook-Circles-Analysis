@@ -28,11 +28,11 @@ Graph::Graph(const vector<Edge>& edges, size_t num_nodes) {
     __init(edges, num_nodes);
 }
 
-bool Graph::areConnected(const Edge& e) {
+bool Graph::areConnected(const Edge& e) const {
     return areConnected(e.start, e.end);
 }
 
-bool Graph::areConnected(Vertex start, Vertex end) {
+bool Graph::areConnected(Vertex start, Vertex end) const {
     if (start >= matrix_.size() || end >= matrix_.size())
         return false;
     return (matrix_[start][end] != 0);
@@ -48,17 +48,17 @@ void Graph::changeWeight(Vertex start, Vertex end, double weight) {
     matrix_[start][end] = weight;
 }
 
-double Graph::getWeight(const Edge& e) {
+double Graph::getWeight(const Edge& e) const {
     return getWeight(e.start, e.end);
 }
 
-double Graph::getWeight(Vertex start, Vertex end) {
+double Graph::getWeight(Vertex start, Vertex end) const {
     if (!areConnected(start, end))
         return 0;
     return matrix_[start][end];
 }
 
-vector<Graph::Edge> Graph::getOutgoingEdges(Vertex start) {
+vector<Graph::Edge> Graph::getOutgoingEdges(Vertex start) const {
     vector<Edge> edges;
     if (start >= matrix_.size())
         return edges;
@@ -70,7 +70,7 @@ vector<Graph::Edge> Graph::getOutgoingEdges(Vertex start) {
     return edges;
 }
 
-vector<Graph::Edge> Graph::getIncomingEdges(Vertex end) {
+vector<Graph::Edge> Graph::getIncomingEdges(Vertex end) const {
     vector<Edge> edges;
     if (end >= matrix_.size())
         return edges;
