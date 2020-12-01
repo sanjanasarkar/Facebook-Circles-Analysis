@@ -107,3 +107,13 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     }
     return out;
 }
+
+/* 
+ * BFS IMPLEMENTATION
+ * Basic algorithm idea:
+ * AFTER the adjency matrix is set up we can finally call the BFS function.
+ * Create a visited array to avoid cycles
+ * Given a starting node and target node check all adjacent nodes and move to the next node unless already visited
+ * Recursively does this to build array of nodes that marks the shortest path
+ * returns array containing path from one node to the other
+ */

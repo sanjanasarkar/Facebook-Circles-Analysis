@@ -98,6 +98,8 @@ class Graph {
         friend bool operator==(const Graph& lhs, const Graph& rhs);
         inline friend bool operator!=(const Graph& lhs, const Graph& rhs) { return !(lhs == rhs); }
 
+        void BFS(int start); 
+
     private:
         vector<vector<double>> matrix_;
 
