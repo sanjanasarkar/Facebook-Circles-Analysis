@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <list>
+#include <iterator>
 
 using std::string;
 using std::vector;
@@ -213,14 +215,15 @@ class Graph {
          * @return false otherwise
          */
         inline friend bool operator!=(const Graph& lhs, const Graph& rhs) { return !(lhs == rhs); }
-
-        void BFS(int start); 
+ 
         /**
          * @brief Get a const reference of the Adjacency Matrix. Const ref to avoid extra copy
          * 
          * @return const vector<vector<double>>& Constant reference to the matrix
          */
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
+
+        vector<int> BFS(int start, const Graph& g);
 
     private:
         /**

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Graph.h"
 
 void Graph::__init(const vector<Edge>& edges, size_t num_nodes) {
@@ -117,3 +119,29 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
  * Recursively does this to build array of nodes that marks the shortest path
  * returns array containing path from one node to the other
  */
+
+vector<int> Graph::BFS(int start, const Graph& g) {
+    vector<bool> visited(g.matrix_.size(), false);
+    vector<int> queue;
+    queue.push_back(start);
+    vector<int> traversal;
+
+    visited[start] = true;
+
+    int vs;
+    while (!queue.empty()) {
+        vs = queue[0];
+
+        traversal.push_back(vs);
+        queue.erase(queue.begin());
+
+        for (int i = 0; i < g.matrix_.size(); i++) {
+            if (g.matrix_[vs][i] == 1 && (!visited[i])) {
+                queue.push_back(i);
+                visited[i] = true;
+            }
+        }
+    }
+
+    return traversal;
+}
