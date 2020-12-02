@@ -90,7 +90,7 @@ class Graph {
         /**
          * @brief Construct a new Graph object
          * 
-         * @param lines String vector. Should be one single integer n>=0, per line.
+         * @param lines String vector. Should be one single integer n>=0, per line. First vertex should be 0.
          * Each Edge is represented by the current line and the one following it - e.g. for [1, 2, 3, 2]
          * there is an Edge from 1->2 and an Edge from 3->2.
          * @param double_directed Boolean flag. If true, the graph will create corresponding
@@ -102,7 +102,7 @@ class Graph {
         /**
          * @brief Construct a new Graph object
          * 
-         * @param edges Vector of Edges to add
+         * @param edges Vector of Edges to add. Lowest Vertex index should be 0.
          * @param num_nodes Total number of nodes/vertices in the graph
          * @param double_directed Boolean flag. If true, the graph will create corresponding
          * reverse edges for all connections given (i.e. for 0->2 and 1->3, the Graph will add
