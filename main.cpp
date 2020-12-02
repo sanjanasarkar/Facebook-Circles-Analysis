@@ -14,13 +14,14 @@ int main() {
     for (size_t i = 0; i < lines.size()/2; ++i) {
         Graph::Edge edge(lines[2*i], lines[2*i + 1], 1);
         edges.push_back(edge);
+
         max_node = std::max(edge.maxVertex(), max_node);
         /*if (i % 1000 == 0)
             std::cout << edge << max_node <<std::endl;*/
     }
 
-    Graph g(edges, max_node);
-    Graph f(lines);
+    Graph g(edges, max_node, true);
+    Graph f(lines, true);
     //std::cout << g << std::endl;
     //std::cout << f;
     std::cout << (g == f) << std::endl;
