@@ -1,13 +1,15 @@
 #include "Graph.h"
 
 void Graph::__init(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
+    matrix_.clear();
     for (size_t i = 0; i < num_nodes; ++i) {
         vector<double> line(num_nodes, 0.0);
         matrix_.push_back(line);
     }
 
     for (Edge e : edges) {
-        matrix_[e.start][e.end] = e.weight;
+        matrix_[e.start][e.end] = e.weight; 
+
         if (double_directed)
             matrix_[e.end][e.start] = e.weight;
     }
@@ -24,11 +26,11 @@ Graph::Graph(const vector<string>& lines, bool double_directed) {
         max_node = std::max(edge.maxVertex(), max_node);
     }
 
-    __init(edges, max_node, double_directed);
+    __init(edges, max_node + 1, double_directed);
 }
 
 Graph::Graph(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
-    __init(edges, num_nodes, double_directed);
+    __init(edges, num_nodes + 1, double_directed);
 }
 
 bool Graph::areConnected(const Edge& e) const {
