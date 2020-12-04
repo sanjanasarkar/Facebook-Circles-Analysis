@@ -6,6 +6,7 @@
 
 using std::string;
 using std::vector;
+using namespace std;
 
 typedef size_t Vertex;
 
@@ -226,6 +227,13 @@ class Graph {
          * @return const vector<vector<double>>& Constant reference to the matrix
          */
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
+
+        /**
+         * @brief Floyd Warshall shortest path algorithm.
+         * 
+         * @param g Graph to do algorithm on
+         */
+        void Graph::FloydWarshall(const Graph& g);
 
     private:
         /**
