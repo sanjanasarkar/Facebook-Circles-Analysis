@@ -227,6 +227,11 @@ class Graph {
          */
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
+
+        vector<int> iddfs(int start, int end, int max_depth, const Graph& g);
+
+        bool dls(int start, int end, int limit, vector<int> &path, const Graph& g);
+
     private:
         /**
          * @brief Adjacency matrix

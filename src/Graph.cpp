@@ -112,3 +112,40 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     }
     return out;
 }
+
+
+
+vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
+    for (int i = 0; i < max_depth; i++) {
+        vector<int> trav;
+        vector<int> reverse;
+        if (dls(start, end, i, trav, g)) {
+            for (int i = int(trav.size())-1; i >= 0 ; i--) {
+                reverse.push_back(trav[i]);
+            }
+            return reverse;
+        }
+    }
+    return vector<int>();
+}
+
+bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g) {
+    if (start == end) {
+        path.push_back(start);
+        return true;
+    }
+
+    if (limit <= 0) {
+        return false;
+    }
+
+    vector<Graph::Edge> adj = getOutgoingEdges(start);
+    for (unsigned i = 0; i < adj.size(); i++) {
+        if (dls(adj[i].end, end, limit-1, path, g)) {
+            path.push_back(start);
+            return true;
+        }
+    }
+
+    return false;
+}
