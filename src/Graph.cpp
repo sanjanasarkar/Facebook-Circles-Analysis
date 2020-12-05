@@ -122,13 +122,13 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
 
 vector<int> Graph::BFS(int start, const Graph& g) {
     vector<bool> visited(g.matrix_.size(), false);
-    vector<int> queue;
+    vector<int> queue, traversal;
+    int vs;
+
     queue.push_back(start);
-    vector<int> traversal;
 
     visited[start] = true;
 
-    int vs;
     while (!queue.empty()) {
         vs = queue[0];
 
@@ -144,4 +144,12 @@ vector<int> Graph::BFS(int start, const Graph& g) {
     }
 
     return traversal;
+}
+
+vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+    dfsTraversal.push_back(start);
+    visited[start] = true;
+    for (int i = 0; i < g.matrix_.size(); i++) {
+        if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
+    }
 }

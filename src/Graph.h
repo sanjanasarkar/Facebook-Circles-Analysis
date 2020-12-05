@@ -223,8 +223,26 @@ class Graph {
          */
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
+        /**
+         * @brief BFS traversal to find shortest path from a vertex.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @return vector of ints that represents shortest path
+         */
         vector<int> BFS(int start, const Graph& g);
 
+        /**
+         * @brief DFS traversal to find shortest path from a vertex 
+         * - used to compare with Iterative Depth DFS implementation.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @param visited vector array of bools marking if already visited
+         * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
     private:
         /**
          * @brief Adjacency matrix
