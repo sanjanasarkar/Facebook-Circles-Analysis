@@ -119,6 +119,21 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
 */
 
 void Graph::FloydWarshall(const Graph& g) {
+    int INFINITY = __INT_MAX__;
     int num_vertices = g.getSize();
+    vector<vector<double>> floyd_warsh_matrix = matrix_;
+    
+    // Initialize adjacency matrix to +inf and set diagonal to 0.0 
+    for (unsigned i = 0; i < floyd_warsh_matrix[0].size(); i++) {
+        for (unsigned j = 0; j < floyd_warsh_matrix[0].size(); j++) {
+            //if (floyd_warsh_matrix[i][j])
+            if (i == j) {
+                floyd_warsh_matrix[i][j] = 0.0;
+            } else {
+                floyd_warsh_matrix[i][j] = INFINITY;
+            }
+        }
+    }
+
     
 }

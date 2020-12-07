@@ -233,7 +233,7 @@ class Graph {
          * 
          * @param g Graph to do algorithm on
          */
-        void Graph::FloydWarshall(const Graph& g);
+        void FloydWarshall(const Graph& g);
 
     private:
         /**
