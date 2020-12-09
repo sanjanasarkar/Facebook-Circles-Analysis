@@ -113,27 +113,47 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     return out;
 }
 
-/**
- * Floyd-Warshall Shortest Path Algorithm Implementation
- * Find paths between all pairs of friends and determine which path is shortest.
-*/
-
-void Graph::FloydWarshall(const Graph& g) {
+vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
     int INFINITY = __INT_MAX__;
     int num_vertices = g.getSize();
-    vector<vector<double>> floyd_warsh_matrix = matrix_;
+    vector<vector<double>> floyd_warsh_matrix;
     
     // Initialize adjacency matrix to +inf and set diagonal to 0.0 
-    for (unsigned i = 0; i < floyd_warsh_matrix[0].size(); i++) {
-        for (unsigned j = 0; j < floyd_warsh_matrix[0].size(); j++) {
-            //if (floyd_warsh_matrix[i][j])
-            if (i == j) {
+    for (int i = 0; i < num_vertices; i++) {
+        for (int j = 0; j < num_vertices; j++) {
+            // Check if there is a connection (All edge weights = 1. No further calculations needed)
+            if (matrix_[i][j] == 1) {
+                floyd_warsh_matrix[i][j] = matrix_[i][j];
+            } else if (i == j) { // Check if vertex points to self (e.g. Vertex A to Vertex A)
                 floyd_warsh_matrix[i][j] = 0.0;
-            } else {
+            } else { // Set pairs with no relationship to infinity
                 floyd_warsh_matrix[i][j] = INFINITY;
             }
         }
     }
 
-    
+    // The meat of the Floyd Warshall Algorithm
+    for (int w = 0; w < num_vertices; w++) {
+        for (int u = 0; u < num_vertices; u++) {
+            for (int v = 0; v < num_vertices; v++) {
+                if (floyd_warsh_matrix[u][v] > floyd_warsh_matrix[u][w] + floyd_warsh_matrix[w][v]) {
+                    floyd_warsh_matrix[u][v] = floyd_warsh_matrix[u][w] + floyd_warsh_matrix[w][v];
+                }
+            }
+        }
+    }
+
+    // // Print all paths
+	// cout << "All Pairs Shortest Paths : \n\n";
+	// for (i = 0; i < num_vertices; i++)
+	// {
+	// 	cout << endl;
+	// 	for (j=0; j<num_vertices; j++)
+	// 	{
+	// 		cout << "From : " << i+1 << " To : " << j+1 << endl;
+	// 		cout << "Path : " << 1+i << obtainPath(i,j) << j+1 << endl;
+	// 		cout << "Distance : " << floyd_warsh_matrix[i][j].getWeight() << endl << endl;
+	// 	}
+	// }
+    return floyd_warsh_matrix; 
 }
