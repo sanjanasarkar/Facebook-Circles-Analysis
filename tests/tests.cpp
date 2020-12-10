@@ -117,6 +117,6 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 	REQUIRE(double_dir.getIncomingEdges(3).size() == 1);
 
 	REQUIRE(single_dir.getWeight(0, 1) == 1);
-	single_dir.changeWeight(Edge(0, 1, 0.1234));
+	single_dir.changeWeight(Graph::Edge(0, 1, 0.1234));
 	REQUIRE(single_dir.getWeight(0, 1) == 0.1234);
 }
