@@ -42,8 +42,8 @@ FileReader.o: src/FileReader.cpp src/FileReader.h
 Graph.o: src/Graph.cpp src/Graph.h src/FileReader.h
 	$(CXX) $(CXXFLAGS) src/Graph.cpp
 
-#test: output_msg catch/catchmain.cpp tests/tests.cpp FileReader.cpp
-#	$(LD) catch/catchmain.cpp tests/tests.cpp FileReader.cpp $(LDFLAGS) -o test
+test: output_msg tests/catchmain.cpp tests/tests.cpp src/FileReader.cpp src/Graph.cpp
+	$(LD) tests/catchmain.cpp tests/tests.cpp src/FileReader.cpp src/Graph.cpp $(LDFLAGS) -o test
 
 clean:
 	-rm -f *.o $(EXENAME) test

@@ -3,9 +3,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <list>
+#include <iterator>
 
 using std::string;
 using std::vector;
+using namespace std;
 
 typedef size_t Vertex;
 
@@ -90,7 +93,7 @@ class Graph {
         /**
          * @brief Construct a new Graph object
          * 
-         * @param lines String vector. Should be one single integer n>=0, per line.
+         * @param lines String vector. Should be one single integer n>=0, per line. First vertex should be 0.
          * Each Edge is represented by the current line and the one following it - e.g. for [1, 2, 3, 2]
          * there is an Edge from 1->2 and an Edge from 3->2.
          * @param double_directed Boolean flag. If true, the graph will create corresponding
@@ -102,7 +105,7 @@ class Graph {
         /**
          * @brief Construct a new Graph object
          * 
-         * @param edges Vector of Edges to add
+         * @param edges Vector of Edges to add. Lowest Vertex index should be 0.
          * @param num_nodes Total number of nodes/vertices in the graph
          * @param double_directed Boolean flag. If true, the graph will create corresponding
          * reverse edges for all connections given (i.e. for 0->2 and 1->3, the Graph will add
@@ -219,7 +222,7 @@ class Graph {
          * @return false otherwise
          */
         inline friend bool operator!=(const Graph& lhs, const Graph& rhs) { return !(lhs == rhs); }
-
+ 
         /**
          * @brief Get a const reference of the Adjacency Matrix. Const ref to avoid extra copy
          * 
@@ -228,9 +231,37 @@ class Graph {
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
 
+
         vector<int> iddfs(int start, int end, int max_depth, const Graph& g);
 
         bool dls(int start, int end, int limit, vector<int> &path, const Graph& g);
+
+        /**
+         * @brief BFS traversal to find shortest path from a vertex.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> BFS(int start, const Graph& g);
+
+        /**
+         * @brief DFS traversal to find shortest path from a vertex 
+         * - used to compare with Iterative Depth DFS implementation.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @param visited vector array of bools marking if already visited
+         * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
+
+         * @brief Floyd Warshall shortest path algorithm.
+         * 
+         * @param g Graph to do algorithm on
+         */
+        vector<vector<double>> FloydWarshall(const Graph& g);
 
     private:
         /**
