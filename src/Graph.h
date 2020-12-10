@@ -230,8 +230,13 @@ class Graph {
          */
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
+
+
+        vector<int> iddfs(int start, int end, int max_depth, const Graph& g);
+
+        bool dls(int start, int end, int limit, vector<int> &path, const Graph& g);
+
         /**
-<<<<<<< HEAD
          * @brief BFS traversal to find shortest path from a vertex.
          * 
          * @param start starting graph vertex
@@ -251,14 +256,13 @@ class Graph {
          * @return vector of ints that represents shortest path
          */
         vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
-=======
+
          * @brief Floyd Warshall shortest path algorithm.
          * 
          * @param g Graph to do algorithm on
          */
         vector<vector<double>> FloydWarshall(const Graph& g);
 
->>>>>>> master
     private:
         /**
          * @brief Adjacency matrix

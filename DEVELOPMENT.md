@@ -13,3 +13,9 @@ We also decided that updating Development.md, creating documentation, the final 
 # WEEK 2:
 
 The first implementation was the Graph. We chose a custom implementation instead of the one provided for lab_ml because we wanted to use an Adjacency Matrix for fast lookup and to be able to more easily perform Google Page Rank, which uses a Markov matrix built off the Adjacency Matrix. We made a simple FileReader class to read from a text file. The Graph implementation can currently read from a FileReader, build the object, and has several helper functions and appropriate getters and setters. It also has an alternate constructor which allows for easier testing, without needing a new text file. 
+
+### 12/5/20
+
+Over the past few days we implemented the iterative-deepening DFS. This method should combine DFS's space efficiency with BFS's speed. This method has space complexity O(bd) and time complexity O(b^d), where b is the Breadth and d is the depth of the graph.
+
+# DOUBLE CHECK THE BIG O ANALYSIS
