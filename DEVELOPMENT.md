@@ -19,3 +19,7 @@ The first implementation was the Graph. We chose a custom implementation instead
 Over the past few days we implemented the iterative-deepening DFS. This method should combine DFS's space efficiency with BFS's speed. This method has space complexity O(bd) and time complexity O(b^d), where b is the Breadth and d is the depth of the graph.
 
 # DOUBLE CHECK THE BIG O ANALYSIS
+
+# WEEK 3:
+
+The Graph class received some small modifications, including a few extra helper functions to help with some of the other algorithms. We also began developing our tests, and testing the Graph functionality found a few small bugs which were easily remedied.
