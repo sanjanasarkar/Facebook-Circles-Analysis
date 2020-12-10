@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <list>
+#include <iterator>
 
 using std::string;
 using std::vector;
@@ -220,7 +222,7 @@ class Graph {
          * @return false otherwise
          */
         inline friend bool operator!=(const Graph& lhs, const Graph& rhs) { return !(lhs == rhs); }
-
+ 
         /**
          * @brief Get a const reference of the Adjacency Matrix. Const ref to avoid extra copy
          * 
@@ -229,12 +231,34 @@ class Graph {
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
         /**
+<<<<<<< HEAD
+         * @brief BFS traversal to find shortest path from a vertex.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> BFS(int start, const Graph& g);
+
+        /**
+         * @brief DFS traversal to find shortest path from a vertex 
+         * - used to compare with Iterative Depth DFS implementation.
+         * 
+         * @param start starting graph vertex
+         * @param g graph to be traversed.
+         * @param visited vector array of bools marking if already visited
+         * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
+=======
          * @brief Floyd Warshall shortest path algorithm.
          * 
          * @param g Graph to do algorithm on
          */
         vector<vector<double>> FloydWarshall(const Graph& g);
 
+>>>>>>> master
     private:
         /**
          * @brief Adjacency matrix
