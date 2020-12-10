@@ -5,7 +5,7 @@
 #include "src/FileReader.h"
 
 int main() {
-    vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
+    vector<string> lines = FileReader::fileToVector("data/twitter_combined.txt");
 
     vector<Graph::Edge> edges;
     std::cout << lines.size() << " " << lines[lines.size() - 1] << std::endl;
