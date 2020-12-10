@@ -8,6 +8,7 @@
 
 using std::string;
 using std::vector;
+using namespace std;
 
 typedef size_t Vertex;
 
@@ -95,16 +96,22 @@ class Graph {
          * @param lines String vector. Should be one single integer n>=0, per line.
          * Each Edge is represented by the current line and the one following it - e.g. for [1, 2, 3, 2]
          * there is an Edge from 1->2 and an Edge from 3->2.
+         * @param double_directed Boolean flag. If true, the graph will create corresponding
+         * reverse edges for all connections given (i.e. for 0->2 and 1->3, the Graph will add
+         * 2->0 and 3->1 edges also. If false, no change to default behavior).
          */
-        Graph(const vector<string>& lines);
+        Graph(const vector<string>& lines, bool double_directed);
 
         /**
          * @brief Construct a new Graph object
          * 
          * @param edges Vector of Edges to add
          * @param num_nodes Total number of nodes/vertices in the graph
+         * @param double_directed Boolean flag. If true, the graph will create corresponding
+         * reverse edges for all connections given (i.e. for 0->2 and 1->3, the Graph will add
+         * 2->0 and 3->1 edges also. If false, no change to default behavior).
          */
-        Graph(const vector<Edge>& edges, size_t num_nodes);
+        Graph(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
 
         /**
          * @brief Changes the weight of the Edge with e's start and end to the weight in e
@@ -224,6 +231,7 @@ class Graph {
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
         /**
+<<<<<<< HEAD
          * @brief BFS traversal to find shortest path from a vertex.
          * 
          * @param start starting graph vertex
@@ -243,6 +251,14 @@ class Graph {
          * @return vector of ints that represents shortest path
          */
         vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
+=======
+         * @brief Floyd Warshall shortest path algorithm.
+         * 
+         * @param g Graph to do algorithm on
+         */
+        vector<vector<double>> FloydWarshall(const Graph& g);
+
+>>>>>>> master
     private:
         /**
          * @brief Adjacency matrix
@@ -254,7 +270,10 @@ class Graph {
          * 
          * @param edges Edges vector list
          * @param num_nodes Total number of nodes
+         * @param double_directed Boolean flag. If true, the graph will create corresponding
+         * reverse edges for all connections given (i.e. for 0->2 and 1->3, the Graph will add
+         * 2->0 and 3->1 edges also. If false, no change to default behavior).
          */
-        void __init(const vector<Edge>& edges, size_t num_nodes);
+        void __init(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
 
 };

@@ -8,17 +8,19 @@ int main() {
     vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
 
     vector<Graph::Edge> edges;
+    std::cout << lines.size() << " " << lines[lines.size() - 1] << std::endl;
 
-    Vertex max_node = 0;
-    for (size_t i = 0; i < lines.size()/2; ++i) {
-        Graph::Edge edge(lines[2*i], lines[2*i + 1], 1);
-        edges.push_back(edge);
-        max_node = std::max(edge.maxVertex(), max_node);
+    Graph g(lines, true);
+    std::cout << g.getSize() << std::endl;
+
+    // Prints out subset of adjacency matrix. Starts at matrix[0][0] and goes to matrix[num][num]
+    vector<vector<double>> adj_mat = g.getAdjacencyMatrix();
+    // Define subset size here
+    unsigned num = 50;
+    for (unsigned i = 0; i < num; i++) {
+        for (unsigned j = 0; j < num; j++) {
+            std::cout << adj_mat[i][j];
+        }
+        std::cout << std::endl;
     }
-
-    Graph g(edges, max_node);
-    Graph f(lines);
-    //std::cout << g << std::endl;
-    //std::cout << f;
-    std::cout << (g == f) << std::endl;
 }
