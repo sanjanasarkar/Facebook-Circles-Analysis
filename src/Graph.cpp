@@ -30,7 +30,7 @@ Graph::Graph(const vector<string>& lines, bool double_directed) {
 }
 
 Graph::Graph(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
-    __init(edges, num_nodes + 1, double_directed);
+    __init(edges, num_nodes, double_directed);
 }
 
 bool Graph::areConnected(const Edge& e) const {
