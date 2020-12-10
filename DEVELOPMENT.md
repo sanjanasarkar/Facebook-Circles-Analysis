@@ -5,7 +5,7 @@ For week 1, we focused on planning and assigning roles. We split up the main par
 1. Creating the Graph implementation and related functions, as well as read in the dataset to the Graph
 2. The Graph traversal, specifically BFS for us
 3. Algorithm 1, specifically the Floyd-Warshall shortest path
-4. Algorithm 2, specifically the Google Page Rank algorithm
+4. Algorithm 2, specifically the iterative-deepening DFS algorithm (original plan was Google Page Rank)
 
 We also decided that updating Development.md, creating documentation, the final video, and developing tests would be shared responsibilities that everyone would contribute to. We decided that all 4 of the major parts above should be mostly functional (excluding edge cases) by the mid-project check in, to allow for time for bux fixing, thorough testing, and creating the presentation.
 
