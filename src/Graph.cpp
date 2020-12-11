@@ -186,14 +186,14 @@ vector<int> Graph::BFS(int start, const Graph& g) {
     return traversal;
 }
 
-vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
     dfsTraversal.push_back(start);
     visited[start] = true;
     for (int i = 0; i < int(g.matrix_.size()); i++) {
         if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
     }
 
-    return dfsTraversal;
+    // return dfsTraversal;
 }
 
     // // Print all paths

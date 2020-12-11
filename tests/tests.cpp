@@ -122,13 +122,170 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 }
 
 TEST_CASE("Simple BFS test", "[graph][functions][directed]") {
-	vector<string> lines = FileReader::fileToVector("tests/test_data_simple.txt");
-
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph single_dir = Graph(lines, false);
 	Graph double_dir = Graph(lines, true);
 
+	// run BFS
 	vector<int> path = double_dir.BFS(0, double_dir);
-	for (auto num : path) {
-		cout << num;
-	}
+
+	// check if BFS ran a breadth first traversal
+	REQUIRE(path.front() == 0);
+	REQUIRE(path.back() == 77);
+	REQUIRE(path.size() == 18);
+
+	// run BFS
+	path = double_dir.BFS(11, double_dir);
+
+	// check if BFS ran a breadth first traversal
+	REQUIRE(path.front() == 11);
+	REQUIRE(path.back() == 1);
+	REQUIRE(path.size() == 18);
+	REQUIRE(path[14] == 0);
+}
+
+TEST_CASE("Full BFS test", "[graph][functions][directed]") {
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
+	Graph single_dir = Graph(lines, false);
+	Graph double_dir = Graph(lines, true);
+
+	// run BFS
+	vector<int> path = double_dir.BFS(0, double_dir);
+
+	// check if BFS ran a breadth first traversal
+	REQUIRE(path.front() == 0);
+	REQUIRE(path.back() == 855);
+	REQUIRE(path.size() == 4039);
+
+	// run BFS
+	path = double_dir.BFS(1000, double_dir);
+
+	// check if BFS ran a breadth first traversal
+	REQUIRE(path.front() == 1000);
+	REQUIRE(path.back() == 855);
+	REQUIRE(path.size() == 4039);
+}
+
+TEST_CASE("Simple DFS test", "[graph][functions][directed]") {
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph single_dir = Graph(lines, false);
+	Graph double_dir = Graph(lines, true);
+
+	// initialized what is needed for DFS Traversal
+	vector<bool> visited;
+	vector<int> traversal;
+	for (int i = 0; i < single_dir.getSize(); i++) visited.push_back(false);
+
+	double_dir.DFS(0, double_dir, visited, traversal);
+
+	// Check if DFS does a depth search first traversal
+	REQUIRE(traversal.front() == 0);
+	REQUIRE(traversal.back() == 99);
+	REQUIRE(traversal.size() == 18);
+
+	// reset DFS
+	for (int i = 0; i < single_dir.getSize(); i++) visited[i] = false;
+	traversal.clear();
+
+	// Check DFS at new starting point
+	double_dir.DFS(11, double_dir, visited, traversal);
+
+	// Check if DFS does a depth search first traversal
+	REQUIRE(traversal.front() == 11);
+	REQUIRE(traversal.back() == 99);
+	REQUIRE(traversal.size() == 18);
+	REQUIRE(traversal[7] == 0);
+}
+
+TEST_CASE("FULL DFS test", "[graph][functions][directed]") {
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
+	Graph single_dir = Graph(lines, false);
+	Graph double_dir = Graph(lines, true);
+
+	// initialized what is needed for DFS Traversal
+	vector<bool> visited;
+	vector<int> traversal;
+	for (int i = 0; i < single_dir.getSize(); i++) visited.push_back(false);
+
+	double_dir.DFS(0, double_dir, visited, traversal);
+
+	// Check if DFS does a depth search first traversal
+	REQUIRE(traversal.front() == 0);
+	REQUIRE(traversal.back() == 335);
+	REQUIRE(traversal.size() == 4039);
+
+	// reset DFS
+	for (int i = 0; i < single_dir.getSize(); i++) visited[i] = false;
+	traversal.clear();
+
+	// Check DFS at new starting point
+	double_dir.DFS(1000, double_dir, visited, traversal);
+
+	// Check if DFS does a depth search first traversal
+	REQUIRE(traversal.front() == 1000);
+	REQUIRE(traversal.back() == 1834);
+	REQUIRE(traversal.size() == 4039);
+}
+
+TEST_CASE("Simple IDDFS", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 1, 100, g);
+	REQUIRE(trav.size() == 2);
+	REQUIRE(trav[0] == 0);
+	REQUIRE(trav[1] == 1);
+
+	trav = g.iddfs(0, 6, 100, g);
+	REQUIRE(trav.size() == 3);
+	REQUIRE(trav[0] == 0);
+	REQUIRE(trav[1] == 2);
+	REQUIRE(trav[2] == 6);
+
+	trav = g.iddfs(3, 99, 200, g);
+	REQUIRE(trav.size() == 10);
+	REQUIRE(trav[0] == 3);
+	REQUIRE(trav[1] == 4);
+	REQUIRE(trav[9] == 99);
+}
+
+TEST_CASE("Longer IDDFS", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(3, 99, 200, g);
+	REQUIRE(trav.size() == 10);
+	REQUIRE(trav[0] == 3);
+	REQUIRE(trav[1] == 4);
+	REQUIRE(trav[2] == 5);
+	REQUIRE(trav[9] == 99);
+}
+
+TEST_CASE("IDDFS find itsself", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 0, 100, g);
+	REQUIRE(trav.size() == 1);
+	REQUIRE(trav[0] == 0);
+
+	trav = g.iddfs(6, 6, 100, g);
+	REQUIRE(trav.size() == 1);
+	REQUIRE(trav[0] == 6);
+
+}
+
+TEST_CASE("IDDFS find nonexistent", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 100, 100, g);
+	REQUIRE(trav.size() == 0);
+
+	trav = g.iddfs(6, 100, 100, g);
+	REQUIRE(trav.size() == 0);
 }

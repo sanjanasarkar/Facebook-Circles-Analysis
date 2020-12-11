@@ -255,7 +255,7 @@ class Graph {
          * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
          * @return vector of ints that represents shortest path
          */
-        vector<int> DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
+        void DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
 
          /* @brief Floyd Warshall shortest path algorithm.
          * 
