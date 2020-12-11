@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Graph.h"
 
 void Graph::__init(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
@@ -30,7 +32,7 @@ Graph::Graph(const vector<string>& lines, bool double_directed) {
 }
 
 Graph::Graph(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
-    __init(edges, num_nodes + 1, double_directed);
+    __init(edges, num_nodes, double_directed);
 }
 
 bool Graph::areConnected(const Edge& e) const {
@@ -113,6 +115,99 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     return out;
 }
 
+vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
+    for (int i = 0; i < max_depth; i++) {
+        vector<int> trav;
+        vector<int> reverse;
+        if (dls(start, end, i, trav, g)) {
+            for (int i = int(trav.size())-1; i >= 0 ; i--) {
+                reverse.push_back(trav[i]);
+            }
+            return reverse;
+        }
+    }
+    return vector<int>();
+}
+
+bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g) {
+    if (start == end) {
+        path.push_back(start);
+        return true;
+    }
+
+    if (limit <= 0) {
+        return false;
+    }
+
+    vector<Graph::Edge> adj = getOutgoingEdges(start);
+    for (unsigned i = 0; i < adj.size(); i++) {
+        if (dls(adj[i].end, end, limit-1, path, g)) {
+            path.push_back(start);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* 
+ * BFS IMPLEMENTATION
+ * Basic algorithm idea:
+ * AFTER the adjency matrix is set up we can finally call the BFS function.
+ * Create a visited array to avoid cycles
+ * Given a starting node and target node check all adjacent nodes and move to the next node unless already visited
+ * Recursively does this to build array of nodes that marks the shortest path
+ * returns array containing path from one node to the other
+ */
+
+vector<int> Graph::BFS(int start, const Graph& g) {
+    vector<bool> visited(g.matrix_.size(), false);
+    vector<int> queue, traversal;
+    int vs;
+
+    queue.push_back(start);
+
+    visited[start] = true;
+
+    while (!queue.empty()) {
+        vs = queue[0];
+
+        traversal.push_back(vs);
+        queue.erase(queue.begin());
+
+        for (int i = 0; i < int(g.matrix_.size()); i++) {
+            if (g.matrix_[vs][i] == 1 && (!visited[i])) {
+                queue.push_back(i);
+                visited[i] = true;
+            }
+        }
+    }
+
+    return traversal;
+}
+
+vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+    dfsTraversal.push_back(start);
+    visited[start] = true;
+    for (int i = 0; i < int(g.matrix_.size()); i++) {
+        if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
+    }
+
+    return dfsTraversal;
+}
+
+    // // Print all paths
+	// cout << "All Pairs Shortest Paths : \n\n";
+	// for (i = 0; i < num_vertices; i++)
+	// {
+	// 	cout << endl;
+	// 	for (j=0; j<num_vertices; j++)
+	// 	{
+	// 		cout << "From : " << i+1 << " To : " << j+1 << endl;
+	// 		cout << "Path : " << 1+i << obtainPath(i,j) << j+1 << endl;
+	// 		cout << "Distance : " << floyd_warsh_matrix[i][j].getWeight() << endl << endl;
+	// 	}
+	// }
 vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
     int INFINITY = __INT_MAX__;
     int num_vertices = g.getSize();
@@ -142,18 +237,5 @@ vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
             }
         }
     }
-
-    // // Print all paths
-	// cout << "All Pairs Shortest Paths : \n\n";
-	// for (i = 0; i < num_vertices; i++)
-	// {
-	// 	cout << endl;
-	// 	for (j=0; j<num_vertices; j++)
-	// 	{
-	// 		cout << "From : " << i+1 << " To : " << j+1 << endl;
-	// 		cout << "Path : " << 1+i << obtainPath(i,j) << j+1 << endl;
-	// 		cout << "Distance : " << floyd_warsh_matrix[i][j].getWeight() << endl << endl;
-	// 	}
-	// }
     return floyd_warsh_matrix; 
 }
