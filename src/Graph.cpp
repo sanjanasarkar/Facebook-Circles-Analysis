@@ -148,7 +148,8 @@ bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g
     }
 
     return false;
-    
+}
+
 /* 
  * BFS IMPLEMENTATION
  * Basic algorithm idea:
@@ -174,7 +175,7 @@ vector<int> Graph::BFS(int start, const Graph& g) {
         traversal.push_back(vs);
         queue.erase(queue.begin());
 
-        for (int i = 0; i < g.matrix_.size(); i++) {
+        for (int i = 0; i < int(g.matrix_.size()); i++) {
             if (g.matrix_[vs][i] == 1 && (!visited[i])) {
                 queue.push_back(i);
                 visited[i] = true;
@@ -188,9 +189,11 @@ vector<int> Graph::BFS(int start, const Graph& g) {
 vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
     dfsTraversal.push_back(start);
     visited[start] = true;
-    for (int i = 0; i < g.matrix_.size(); i++) {
+    for (int i = 0; i < int(g.matrix_.size()); i++) {
         if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
     }
+
+    return dfsTraversal;
 }
 
     // // Print all paths
