@@ -11,10 +11,13 @@ int main() {
         int double_dir;
         cout << "Hello! Welcome to our project" << endl;
         cout << endl;
+        // Include code for whole dataset here
+
         cout << "Which graph are you interested in taking a closer look at?" << endl;
         cout << "Simple? or Complex?" << endl;
         cout << "Please type your answer: ";
         cin >> graph_file;
+        cout << endl;
 
         // Deciding between simple and complex graph
         if (graph_file == "Simple" || graph_file == "simple") {
