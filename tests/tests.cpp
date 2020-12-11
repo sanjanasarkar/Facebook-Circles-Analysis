@@ -5,6 +5,8 @@
 #include "../src/FileReader.h"
 #include "../src/Graph.h"
 
+/************************************** Tests for Graph Set-Up **************************************/
+
 /**
  * The "test_data_simple" Graph should look like this if single directed:
  * 0 ---> 1
@@ -113,6 +115,8 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 	single_dir.changeWeight(Graph::Edge(0, 1, 0.1234));
 	REQUIRE(single_dir.getWeight(0, 1) == 0.1234);
 }
+
+/*********************************** Tests for Traversals (BFS and DFS) ***********************************/
 
 TEST_CASE("Simple BFS test", "[graph][functions][directed]") {
 	// Setup Graph
@@ -224,6 +228,7 @@ TEST_CASE("FULL DFS test", "[graph][functions][directed]") {
 	REQUIRE(traversal.size() == 4039);
 }
 
+/*********************************** Tests for Complex Algorithm (IDDFS) ***********************************/
 TEST_CASE("Simple IDDFS", "[graph][functions][directed][Search][IDDFS]") {
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
@@ -274,6 +279,8 @@ TEST_CASE("IDDFS find nonexistent", "[graph][functions][directed][Search][IDDFS]
 	REQUIRE(trav.size() == 0);
 }
 
+/****************************** Tests for Shortest Path Alg (Floyd-Warshall) ******************************/
+
 /** Floyd Warshall for a Single Directed "test_simple_data" graph should look like:
  *          0		1		1		2
  * 			inf		0		inf		inf
@@ -302,7 +309,6 @@ TEST_CASE("Shortest Path test simple - single directed", "[floyd-warshall][simpl
  * 			1		0		2		3
  * 			1		2		0		1
  * 			2		3		1		0
- * Note: in our implementation, infinity (inf) is defined as __INT_MAX_ (approx 2.14748e+09)
  */
 
 TEST_CASE("Shortest Path test simple - double directed", "[floyd-warshall][simple][double-directed]") {
@@ -313,6 +319,74 @@ TEST_CASE("Shortest Path test simple - double directed", "[floyd-warshall][simpl
 										{1, 0, 2, 3},
 										{1, 2, 0, 1},
 										{2, 3, 1, 0}
+									  };
+
+	vector<vector<double>> fw_mat = g.FloydWarshall();
+	REQUIRE(expected == fw_mat);
+}
+
+/**
+ * The "test_data_complex_path" Graph should look like this if single directed:
+ * 0 ---> 1 ---> 2
+ *  \	  |		 |
+ *   \	  |		 |
+ *    \   V		 V
+ * 	   \> 3		 6
+ * 		  |		 ^
+ *  	  |		 |
+ *        V		/
+ * 		  4	   /	 
+ * 		  |	  /	 
+ *  	  |	 /	 
+ *        V	/	 
+ * 		  5		 
+ * 
+ * and look like this if double directed:
+ * 0 <---> 1 <---> 2
+ * ^\	  ^		 ^
+ *   \	  |		 |
+ *    \   V		 V
+ * 	   \> 3		 6
+ * 		  ^		 ^
+ *  	  |		 |
+ *        V	 	 /
+ * 		  4	    /	 
+ * 		  ^	   /	 
+ *  	  |	  /	 
+ *        V  /	 
+ * 		  5</
+ * */
+
+TEST_CASE("Shortest Path test complex - single directed", "[floyd-warshall][complex][single-directed]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_complex_path.txt");
+	Graph g(lines, false);  // single directed graph
+	double INF = __INT_MAX__;
+	
+	vector<vector<double>> expected = { {0, 1, 2, 2, 3, 1, 2},
+										{INF, 0, 1, 1, 2, INF, 2},
+										{INF, INF, 0, INF, INF, INF, 1},
+										{INF, INF, INF, 0, 1, INF, INF},
+										{INF, INF, INF, INF, 0, INF, INF},
+										{INF, INF, INF, INF, INF, 0, 1},
+										{INF, INF, INF, INF, INF, INF, 0}
+									  };
+
+	vector<vector<double>> fw_mat = g.FloydWarshall();
+	REQUIRE(expected == fw_mat);
+}
+
+TEST_CASE("Shortest Path test complex - double directed", "[floyd-warshall][complex][double-directed]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_complex_path.txt");
+	Graph g(lines, true);  // single directed graph
+	double INF = __INT_MAX__;
+	
+	vector<vector<double>> expected = { {0, 1, 2, 2, 3, 1, 2},
+										{1, 0, 1, 1, 2, 2, 2},
+										{2, 1, 0, 2, 3, 2, 1},
+										{2, 1, 2, 0, 1, 3, 3},
+										{3, 2, 3, 1, 0, 4, 4},
+										{1, 2, 2, 3, 4, 0, 1},
+										{2, 2, 1, 3, 4, 1, 0}
 									  };
 
 	vector<vector<double>> fw_mat = g.FloydWarshall();

@@ -2,7 +2,10 @@
 
 #include "Graph.h"
 
+/****************************** Graph Functions ******************************/
+
 void Graph::__init(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
+    is_double_directed = double_directed;
     // Initialize adjacency matrix
     matrix_.clear();
     vertices.clear();
@@ -101,6 +104,10 @@ vector<Graph::Edge> Graph::getIncomingEdges(Vertex end) const {
     return edges;
 }
 
+vector<Vertex> Graph::get_vertices() {
+    return vertices;
+}
+
 bool operator==(const Graph& lhs, const Graph& rhs) {
     if (lhs.matrix_.size() != rhs.matrix_.size() || lhs.matrix_[0].size() != rhs.matrix_.size()) {
         return false;
@@ -127,6 +134,7 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     return out;
 }
 
+/****************************** Complex Alg Functions ******************************/
 
 // IDDFS: do a depth first search, but limit the max depth of the search starting at 1.
 // if not found, make max_depth deeper and do the depth limited search at a deeper level
@@ -179,6 +187,8 @@ bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g
     return false;
 }
 
+/****************************** Traversal Functions ******************************/
+
 /* 
  * BFS IMPLEMENTATION
  * Basic algorithm idea:
@@ -225,6 +235,8 @@ void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &d
     // return dfsTraversal;
 }
 
+/****************************** Shortest Path Alg Functions ******************************/
+
 vector<vector<double>> Graph::FloydWarshall() {
     int INFINITY = __INT_MAX__;
     int num_vertices = getSize();
@@ -262,7 +274,7 @@ vector<vector<double>> Graph::FloydWarshall() {
 void Graph::print_shortest_paths(const vector<vector<double>> fw_matrix, bool double_directed) {
     double smallest = find_min_max_paths(fw_matrix)[0];
 
-    // Compile all relationships that have the min and max path length
+    // Compile all relationships that have the min path length
     std::vector<std::string> shortest_paths;
 
     // This loop traverses the upper triangle (including diagonal) of the square floyd-warshall matrix
@@ -281,8 +293,17 @@ void Graph::print_shortest_paths(const vector<vector<double>> fw_matrix, bool do
         cur_row++;
     }
     cout << "Shortest Path Length: " << smallest << endl;
-    cout << "The shortest paths between friends occur between:" << endl;
-    for (unsigned i = 0; i < shortest_paths.size(); i++) {
+
+    unsigned lim;
+    if (shortest_paths.size() > 30) {
+        lim = 30;
+        cout << "NOTE: The following output is truncated for printing purposes:" << endl;
+    } else {
+        lim = shortest_paths.size();
+    }
+
+    cout << "The shortest paths occur between:" << endl;
+    for (unsigned i = 0; i < lim; i++) {
         cout << shortest_paths[i] << endl;
     } 
 }
@@ -290,7 +311,7 @@ void Graph::print_shortest_paths(const vector<vector<double>> fw_matrix, bool do
 void Graph::print_longest_paths(const vector<vector<double>> fw_matrix, bool double_directed) {
     double longest = find_min_max_paths(fw_matrix)[1];
 
-    // Compile all relationships that have the min and max path length
+    // Compile all relationships that have the max path length
     std::vector<std::string> longest_paths;
 
     // This loop traverses the upper triangle (including diagonal) of the square floyd-warshall matrix
@@ -309,8 +330,16 @@ void Graph::print_longest_paths(const vector<vector<double>> fw_matrix, bool dou
         cur_row++;
     }
     cout << "Longest Path Length: " << longest << endl;
-    cout << "The longest paths between friends occur between:" << endl;
-    for (unsigned i = 0; i < longest_paths.size(); i++) {
+    unsigned lim;
+    if (longest_paths.size() > 30) {
+        lim = 30;
+        cout << "NOTE: The following output is truncated for printing purposes:" << endl;
+    } else {
+        lim = longest_paths.size();
+    }
+
+    cout << "The longest paths occur between:" << endl;
+    for (unsigned i = 0; i < lim; i++) {
         cout << longest_paths[i] << endl;
     } 
 }
@@ -325,7 +354,7 @@ vector<double> Graph::find_min_max_paths(const vector<vector<double>> matrix) {
             if (matrix[i][j] < smallest && matrix[i][j] != 0.0) {
                 smallest = matrix[i][j];
             }
-            if (matrix[i][j] > longest) {
+            if (matrix[i][j] > longest && matrix[i][j] != __INT_MAX__) {
                 longest = matrix[i][j];
             }
         }
@@ -334,6 +363,119 @@ vector<double> Graph::find_min_max_paths(const vector<vector<double>> matrix) {
     return min_max_vals;
 }
 
-vector<Vertex> Graph::get_vertices() {
-    return vertices;
+/*************************** I/O Driver Code ***************************/
+void Graph::start_presentation() {
+    vector<string> lines;
+    cout << "We examined a dataset of social circles on Facebook" << endl;
+    Current_State current_state = Current_State::MENU;
+    bool structure = false;
+    bool traversals = false;
+    bool shortpath = false;
+    bool complexalg = false;
+
+    LOOP:
+    while (!(structure && traversals && shortpath && complexalg)) {
+        switch(current_state) {
+            MENU_START:
+            case Current_State::MENU: {
+                cout << "What would you like to see?"  << endl;
+                cout << "1. Graph Structure" << endl;
+                cout << "2. Traversals" << endl;
+                cout << "3. Shortest Path Algorithm" << endl;
+                cout << "4. Complex Algorithm" << endl;
+                cout << "5. Quit Program" << endl;
+                cout << "Type in the number: "; 
+                int num;
+                cin >> num;
+                cout << endl;
+                switch(num) {
+                    case 1:
+                        current_state = Current_State::STRUCTURE;
+                        break;
+                    case 2:
+                        current_state = Current_State::TRAVERSALS;
+                        break;
+                    case 3:
+                        current_state = Current_State::SHORTESTPATH;
+                        break;
+                    case 4:
+                        current_state = Current_State::COMPLEXALG;
+                        break;
+                    case 5:
+                        current_state = Current_State::QUIT;
+                        break;
+                    default:
+                        cout << "Sorry, that command is not recognized. Try Again.";
+                        cout << endl;
+                        goto MENU_START;
+                }
+                break;
+            }
+            case Current_State::STRUCTURE: {
+                /************* ADD STRUCTURE OUTPUT HERE *************/
+                cout << "Overall Graph Structure" << endl;
+                cout << "Number of Nodes in Facebook graph: " << getSize() << endl;
+
+                int dim = get_vertices().size();
+                cout << "Subset of Adjacency matrix with dimensions [" << dim << "] x [" << dim << "]: " << endl;
+                cout << endl;
+
+                // Prints out subset of adjacency matrix. Starts at matrix[0][0] and goes to matrix[dim][dim]
+                vector<vector<double>> adj_mat = this->getAdjacencyMatrix();
+                cout << *this << endl;
+
+                current_state = Current_State::MENU;
+                break;
+            }
+            case Current_State::TRAVERSALS: {
+                /************* ADD TRAVERSALS OUTPUT HERE *************/
+                cout << "Traversals" << endl;
+                current_state = Current_State::MENU;
+                break;
+            }
+            case Current_State::SHORTESTPATH: {
+                cout << "Shortest Path - Floyd-Warshall Algorithm" << endl;
+                cout << endl;
+
+                vector<vector<double>> fw_mat = this->FloydWarshall();
+                cout << "All-Pairs matrix: " << endl;
+
+                unsigned size = this->getSize();
+                // Prints out floyd-warshall matrix
+                for (unsigned i = 0; i < size; i++) {
+                    for (unsigned j = 0; j < size; j++) {
+                        if (fw_mat[i][j] == __INT_MAX__) {
+                            std::cout << " " << "INF";
+                            continue;
+                        }
+                        std::cout << " " << fw_mat[i][j];
+                    }
+                    std::cout << std::endl;
+                }
+                cout << endl;
+                // Printing longest paths in graph
+                this->print_longest_paths(fw_mat, is_double_directed);
+                cout << endl;
+                // Printing shortest paths in graph
+                this->print_shortest_paths(fw_mat, is_double_directed);
+                cout << endl;
+
+                current_state = Current_State::MENU;
+                break;
+            }
+            case Current_State::COMPLEXALG: {
+                /************* ADD COMPLEXALG OUTPUT HERE *************/
+                cout << "Complex Alg" << endl;
+                current_state = Current_State::MENU;
+                break;
+            }
+            case Current_State::QUIT: {
+                goto END;
+                break;
+            }
+        }
+        goto LOOP;
+    }
+    END:
+        cout << "Thank you for your time!" << endl;
 }

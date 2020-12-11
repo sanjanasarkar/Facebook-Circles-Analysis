@@ -15,7 +15,14 @@ typedef size_t Vertex;
 
 /** A simple directed graph, implemented via an Adjacency Matrix. */
 class Graph {
-
+    enum class Current_State {
+    MENU = 1,
+    STRUCTURE = 2,
+    TRAVERSALS = 3,
+    SHORTESTPATH = 4,
+    COMPLEXALG = 5,
+    QUIT = 6
+};
     public:
         /**
          * Simple struct to contain the Edges.
@@ -287,6 +294,12 @@ class Graph {
          */
         vector<Vertex> get_vertices();
 
+        /**
+         * @brief Begins interaction with user and guides them through the program
+         * 
+         */
+        void start_presentation();
+
     private:
         /**
          * @brief Adjacency matrix
@@ -297,6 +310,11 @@ class Graph {
          * @brief Vector of vertices in graph
          */
         vector<Vertex> vertices;
+
+        /**
+         * @brief Bool to identify directedness of graph
+         */
+        bool is_double_directed;
 
         /**
          * @brief Helper function for both constructors. Creates the Adjacency Matrix.
@@ -310,7 +328,7 @@ class Graph {
         void __init(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
 
         /**
-         * @brief Finds smallest and largest lengths of paths in graph
+         * @brief Helper function: Finds smallest and largest lengths of paths in graph
          * 
          * @param mat Matrix
          * 
