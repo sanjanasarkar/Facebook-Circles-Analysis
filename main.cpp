@@ -7,40 +7,59 @@
 int main() {   
     vector<string> lines;    
     start:
-        string graph_file;
-        int double_dir;
-        cout << "Hello! Welcome to our project" << endl;
-        cout << endl;
+        int graph_file = -1;
+        int double_dir = -1;
+        cout << endl << "**********************************" << endl;
+        cout << "* Hello! Welcome to our project! *" << endl;
         // Include code for whole dataset here
-
-        cout << "Which graph are you interested in taking a closer look at?" << endl;
-        cout << "Simple? or Complex?" << endl;
-        cout << "Please type your answer: ";
-        cin >> graph_file;
-        cout << endl;
-
+        while (graph_file == -1){
+            cout << "**********************************" << endl;
+            cout << "Which graph are you interested in taking a closer look at?" << endl;
+            cout << "1. Simple" << endl << "2. Complex" << endl;
+            cout << "Please type '1' or '2': ";
+            cin >> graph_file;
+            cout << endl;
+            if (cin.fail()) {
+                cout << "sorry, you did not input an integer " << endl << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                graph_file = -1;
+            }
+        }
+        
         // Deciding between simple and complex graph
-        if (graph_file == "Simple" || graph_file == "simple") {
+        if (graph_file == 1) {
             lines = FileReader::fileToVector("data/simple_graph.txt");
-        } else if (graph_file == "Complex" || graph_file == "complex") {
+        } else if (graph_file == 2) {
             // lines = FileReader::fileToVector("data/complex_graph.txt");
             lines = FileReader::fileToVector("tests/test_data_complex_path.txt");
         } else {
             cout << "Sorry, that command is not recognized. Try Again." << endl;
-            cout << endl;
+            graph_file = -1;
             goto start;
         } 
 
         DIRECTION:
-        cout << "Which graph are you interested in taking a closer look at?" << endl;
-        cout << "Single-Directed? or Double-Directed?" << endl;
-        cout << "Please type '1' or '2': ";
-        cin >> double_dir;
-        cout << endl;
+
+        while (double_dir == -1) {
+            cout << "**********************************" << endl;
+            cout << "Which graph are you interested in taking a closer look at?" << endl;
+            cout << "Single-Directed? or Double-Directed?" << endl;
+            cout << "Please type '1' or '2': ";
+            cin >> double_dir;
+            cout << endl;
+            if (cin.fail()) {
+                cout << "sorry, you did not input an integer " << endl << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                double_dir = -1;
+            }
+        }
         
         if (double_dir != 1 && double_dir != 2) {
             cout << "Please choose a valid number" << endl;
             cout << endl;
+            double_dir = -1;
             goto DIRECTION;
         }
 

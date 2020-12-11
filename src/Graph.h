@@ -239,10 +239,26 @@ class Graph {
         inline const vector<vector<double>>& getAdjacencyMatrix() const { return matrix_; }
 
 
+        /**
+         * @brief Starts the IDDFS
+         * 
+         * @param start Starting Vertex
+         * @param end End Vertex
+         * @param max_depth Maximum depth to search to
+         * @return vector<int> of the path taken by the search
+         */
+        vector<int> iddfs(int start, int end, int max_depth);
 
-        vector<int> iddfs(int start, int end, int max_depth, const Graph& g);
-
-        bool dls(int start, int end, int limit, vector<int> &path, const Graph& g);
+        /**
+         * @brief Helper function for the IDDFS, recursivly does a depth-limited search
+         * 
+         * @param start Starting Vertex
+         * @param end End Vertex
+         * @param limit Maximum depth for depth-limited search
+         * @param path Vector of Vertices traversed by the search
+         * @return bool of if it was successful
+         */
+        bool dls(int start, int end, int limit, vector<int> &path);
 
         /**
          * @brief BFS traversal to find shortest path from a vertex.

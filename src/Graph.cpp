@@ -143,7 +143,7 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
 // Time complexity: O(b^d)
 // Space complexity: O(bd)
 // (b is breadth, d is depth)
-vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
+vector<int> Graph::iddfs(int start, int end, int max_depth) {
     
     for (int i = 1; i < max_depth; i++) {
         // init the traversal, as well as a vector that is the reverse
@@ -151,7 +151,7 @@ vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
         vector<int> reverse;
 
         // do the dls, go deeper if failed
-        if (dls(start, end, i, trav, g)) {
+        if (dls(start, end, i, trav)) {
             // flip the output to have the correct order, might slow it down (not 100% needed)
             for (int i = int(trav.size())-1; i >= 0 ; i--) {
                 reverse.push_back(trav[i]);
@@ -163,22 +163,21 @@ vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
 }
 
 // recursively do the depth limited search
-bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g) {
-   
+bool Graph::dls(int start, int end, int limit, vector<int> &path) {
 
     // base case
     if (start == end) {
         path.push_back(start);
         return true;
     }
-
+    // stop if depth limit is reached
     if (limit <= 0) {
         return false;
     }
-
+    // otherwise recurse through all connected vertices
     vector<Graph::Edge> adj = getOutgoingEdges(start);
     for (unsigned i = 0; i < adj.size(); i++) {
-        if (dls(adj[i].end, end, limit-1, path, g)) {
+        if (dls(adj[i].end, end, limit-1, path)) {
             path.push_back(start);
             return true;
         }
@@ -378,6 +377,7 @@ void Graph::start_presentation() {
         switch(current_state) {
             MENU_START:
             case Current_State::MENU: {
+                cout << "**********************************" << endl;
                 cout << "What would you like to see?"  << endl;
                 cout << "1. Graph Structure" << endl;
                 cout << "2. Traversals" << endl;
@@ -386,7 +386,14 @@ void Graph::start_presentation() {
                 cout << "5. Quit Program" << endl;
                 cout << "Type in the number: "; 
                 int num;
+                
                 cin >> num;
+                if (cin.fail()) {
+                    cout << endl << "sorry, you did not input an integer " << endl << endl;
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 cout << endl;
                 switch(num) {
                     case 1:
@@ -405,8 +412,9 @@ void Graph::start_presentation() {
                         current_state = Current_State::QUIT;
                         break;
                     default:
-                        cout << "Sorry, that command is not recognized. Try Again.";
+                        cout << "Sorry, that command is not recognized. Try Again." << endl;
                         cout << endl;
+                        num = -1;
                         goto MENU_START;
                 }
                 break;
@@ -465,8 +473,62 @@ void Graph::start_presentation() {
             }
             case Current_State::COMPLEXALG: {
                 /************* ADD COMPLEXALG OUTPUT HERE *************/
-                cout << "Complex Alg" << endl;
+                cout << "********************************" << endl << "Complex Alg - IDDFS" << endl << endl;
                 current_state = Current_State::MENU;
+                //vector<int> trav;
+                // if (vertices.size() > 5) {
+                //     trav = iddfs(0, 6, 200);
+                // } else {
+                //     trav = iddfs(0, 3, 200);
+                // }
+                
+                cout << "Vertices in graph:  ";
+                //cout << int(vertices.size());
+                for(unsigned i : vertices) {
+                    cout << i << " ";
+                }
+                cout << endl;
+
+                int start = -1;
+                int end = -1;
+
+                while (start == -1) {
+                    cout << "**********************************" << endl << "What node do you want to start at?" << endl;
+                    cin >> start;
+                    if (cin.fail()) {
+                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        start = -1;
+                    }
+                }
+                
+                while (end == -1) {
+                    cout << "********************************" << endl << "What node do you want to end at?" << endl;
+                    cin >> end;
+                    if (cin.fail()) {
+                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        end = -1;
+                    }
+                }
+                cout << endl;
+
+                vector<int> trav = iddfs(start, end, 20);
+
+                cout << "**********************************" << endl;
+
+                if(trav.size() == 0) {
+                    cout << "No path found. ";
+                } else {
+                    cout << "Path from Vertex " << start << " to Vertex " << end << " :  ";
+                    for(int i : trav) {
+                        cout << i << " ";
+                    }
+                }
+                cout << endl << endl;
+                
                 break;
             }
             case Current_State::QUIT: {
@@ -477,5 +539,7 @@ void Graph::start_presentation() {
         goto LOOP;
     }
     END:
-        cout << "Thank you for your time!" << endl;
+        cout << "**********************************" << endl;
+        cout << "*    Thank you for your time!    *" << endl;
+        cout << "**********************************" << endl;
 }
