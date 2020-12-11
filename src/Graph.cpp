@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include "Graph.h"
 
@@ -371,9 +372,10 @@ void Graph::start_presentation() {
     bool traversals = false;
     bool shortpath = false;
     bool complexalg = false;
+    bool timecomplexity = false;
 
     LOOP:
-    while (!(structure && traversals && shortpath && complexalg)) {
+    while (!(structure && traversals && shortpath && complexalg && timecomplexity)) {
         switch(current_state) {
             MENU_START:
             case Current_State::MENU: {
@@ -383,7 +385,8 @@ void Graph::start_presentation() {
                 cout << "2. Traversals" << endl;
                 cout << "3. Shortest Path Algorithm" << endl;
                 cout << "4. Complex Algorithm" << endl;
-                cout << "5. Quit Program" << endl;
+                cout << "5. Run Times of BFS, DFS, and IDDFS" << endl;
+                cout << "6. Quit Program" << endl;
                 cout << "Type in the number: "; 
                 int num;
                 
@@ -409,6 +412,9 @@ void Graph::start_presentation() {
                         current_state = Current_State::COMPLEXALG;
                         break;
                     case 5:
+                        current_state = Current_State::TIMECOMPLEXITY;
+                        break;
+                    case 6:
                         current_state = Current_State::QUIT;
                         break;
                     default:
@@ -435,9 +441,74 @@ void Graph::start_presentation() {
                 current_state = Current_State::MENU;
                 break;
             }
+
+            TRAVERSALS:
             case Current_State::TRAVERSALS: {
                 /************* ADD TRAVERSALS OUTPUT HERE *************/
                 cout << "Traversals" << endl;
+                cout << endl;
+                cout << "Choose between the following options: " << endl;
+                cout << "1. BFS" << endl << "2. DFS" << endl;
+                cout << "Type in the number: ";
+
+                // initialize required variables
+                vector<int> path, traversal;
+                int selector, start = -1;
+                vector<bool> visited;
+	            for (size_t i = 0; i < this->getSize(); i++) visited.push_back(false);
+
+                // choose traversal
+                cin >> selector;
+                if (cin.fail()) {
+                    cout << endl << "sorry, you did not input an integer " << endl << endl;
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
+
+                // display vertices
+                cout << "Vertices in graph:  " << endl;
+                for(unsigned i : vertices) cout << i << " ";
+                cout << endl;
+
+                // select starting node thats in the graph
+                while (start == -1) {
+                    cout << "**********************************" << endl << "What node do you want to start at?" << endl;
+                    cout << "Type in the number: ";
+                    cin >> start;
+                    if (cin.fail()) {
+                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        start = -1;
+                    }
+                    if (this->getOutgoingEdges(start).size() == 0) {
+                        cout << endl << "sorry, that vertix doesn't exist, try again " << endl << endl;
+                        start = -1;
+                    }
+                }
+
+                // preform traversals based on selector
+                switch(selector) {
+                    case 1:
+                        path = this->BFS(start, * this);
+                        cout << endl << "BFS Traversal produces: " << endl;
+                        for(unsigned i : path) cout << i << " ";
+                        cout << endl;
+                        break;
+                    case 2:
+                        this->DFS(start, * this, visited, traversal);
+                        cout << endl << "DFS Traversal produces: " << endl;
+                        for(unsigned i : traversal) cout << i << " ";
+                        cout << endl;
+                        break;
+                    default:
+                        cout << "Sorry, that command is not recognized. Try Again." << endl;
+                        cout << endl;
+                        selector = -1;
+                        goto TRAVERSALS;
+                }
+
                 current_state = Current_State::MENU;
                 break;
             }
@@ -501,6 +572,10 @@ void Graph::start_presentation() {
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         start = -1;
                     }
+                    if (this->getOutgoingEdges(start).size() == 0) {
+                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        start = -1;
+                    }
                 }
                 
                 while (end == -1) {
@@ -510,6 +585,10 @@ void Graph::start_presentation() {
                         cout << endl << "sorry, you did not input an integer " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        end = -1;
+                    }
+                    if (this->getOutgoingEdges(end).size() == 0) {
+                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
                         end = -1;
                     }
                 }
@@ -529,6 +608,40 @@ void Graph::start_presentation() {
                 }
                 cout << endl << endl;
                 
+                break;
+            }
+            case Current_State::TIMECOMPLEXITY: {
+                cout << "********************************" << endl << "Checking Traversal Run Times" << endl << endl;
+                current_state = Current_State::MENU;
+
+                // INITIALIZING VARIABLES
+                vector<int> path, traversal;
+                vector<bool> visited;
+                for (size_t i = 0; i < this->getSize(); i++) visited.push_back(false);
+
+                // calculate time function takes for BFS
+                cout << "Time to run BFS: ";
+                auto t1 = std::chrono::high_resolution_clock::now();
+                path = this->BFS(0, * this);
+                auto t2 = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                cout << duration << " microseconds" << endl;
+
+                // calculate time function take for DFS
+                cout << "Time to run DFS: ";
+                t1 = std::chrono::high_resolution_clock::now();
+                this->DFS(0, * this, visited, traversal);
+                t2 = std::chrono::high_resolution_clock::now();
+                duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                cout << duration << " microseconds" << endl;
+
+                // calculate time function take for DFS
+                cout << "Time to run IDDFS: ";
+                t1 = std::chrono::high_resolution_clock::now();
+                vector<int> trav = iddfs(0, this->getMaxVertex(), 20);
+                t2 = std::chrono::high_resolution_clock::now();
+                duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                cout << duration << " microseconds" << endl << endl;
                 break;
             }
             case Current_State::QUIT: {

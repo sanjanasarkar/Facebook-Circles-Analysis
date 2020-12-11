@@ -16,13 +16,14 @@ typedef size_t Vertex;
 /** A simple directed graph, implemented via an Adjacency Matrix. */
 class Graph {
     enum class Current_State {
-    MENU = 1,
-    STRUCTURE = 2,
-    TRAVERSALS = 3,
-    SHORTESTPATH = 4,
-    COMPLEXALG = 5,
-    QUIT = 6
-};
+        MENU = 1,
+        STRUCTURE = 2,
+        TRAVERSALS = 3,
+        SHORTESTPATH = 4,
+        COMPLEXALG = 5,
+        TIMECOMPLEXITY = 6,
+        QUIT = 7
+    };
     public:
         /**
          * Simple struct to contain the Edges.
@@ -200,7 +201,7 @@ class Graph {
          * 
          * @return Vertex Maximum Vertex magnitude
          */
-        inline Vertex getMaxVertex() const { return getSize(); }
+        inline Vertex getMaxVertex() const { return getSize() - 1; }
 
         /**
          * @brief Insertion operator to print the Adjacency Matrix.
