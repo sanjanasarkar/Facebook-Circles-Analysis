@@ -1,7 +1,9 @@
 #include "Graph.h"
 
 void Graph::__init(const vector<Edge>& edges, size_t num_nodes, bool double_directed) {
+    // Initialize adjacency matrix
     matrix_.clear();
+    vertices.clear();
     for (size_t i = 0; i < num_nodes; ++i) {
         vector<double> line(num_nodes, 0.0);
         matrix_.push_back(line);
@@ -12,6 +14,16 @@ void Graph::__init(const vector<Edge>& edges, size_t num_nodes, bool double_dire
 
         if (double_directed)
             matrix_[e.end][e.start] = e.weight;
+        
+        // Initializes vertices vector
+        // Check if first vertex already in vertices vector
+        if (std::find(vertices.begin(), vertices.end(), e.start) == vertices.end()) {
+            vertices.push_back(e.start);
+        }
+        // Check if second vertex already in vertices vector
+        if (std::find(vertices.begin(), vertices.end(), e.end) == vertices.end()) {
+            vertices.push_back(e.end);
+        }
     }
 }
 
@@ -113,10 +125,11 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     return out;
 }
 
-vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
+vector<vector<double>> Graph::FloydWarshall() {
     int INFINITY = __INT_MAX__;
-    int num_vertices = g.getSize();
-    vector<vector<double>> floyd_warsh_matrix;
+    int num_vertices = getSize();
+    int n = num_vertices;
+    vector<vector<double>> floyd_warsh_matrix(n, vector<double>(n, 0.0));
     
     // Initialize adjacency matrix to +inf and set diagonal to 0.0 
     for (int i = 0; i < num_vertices; i++) {
@@ -143,17 +156,84 @@ vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
         }
     }
 
-    // // Print all paths
-	// cout << "All Pairs Shortest Paths : \n\n";
-	// for (i = 0; i < num_vertices; i++)
-	// {
-	// 	cout << endl;
-	// 	for (j=0; j<num_vertices; j++)
-	// 	{
-	// 		cout << "From : " << i+1 << " To : " << j+1 << endl;
-	// 		cout << "Path : " << 1+i << obtainPath(i,j) << j+1 << endl;
-	// 		cout << "Distance : " << floyd_warsh_matrix[i][j].getWeight() << endl << endl;
-	// 	}
-	// }
     return floyd_warsh_matrix; 
+}
+
+void Graph::print_shortest_paths(const vector<vector<double>> fw_matrix, bool double_directed) {
+    double smallest = find_min_max_paths(fw_matrix)[0];
+
+    // Compile all relationships that have the min and max path length
+    std::vector<std::string> shortest_paths;
+
+    // This loop traverses the upper triangle (including diagonal) of the square floyd-warshall matrix
+    unsigned cur_row = 0;
+    for (unsigned i = 0; i < fw_matrix[0].size(); i++) {
+        for (unsigned j = cur_row; j < fw_matrix[0].size(); j++) {
+            if (fw_matrix[i][j] == smallest && !double_directed) {
+                string shortest_path = "Friend " + to_string(i) + " -> Friend " + to_string(j);
+                shortest_paths.push_back(shortest_path);
+            }
+            if (fw_matrix[i][j] == smallest && double_directed) {
+                string shortest_path = "Friend " + to_string(i) + " <-> Friend " + to_string(j);
+                shortest_paths.push_back(shortest_path);
+            }
+        }
+        cur_row++;
+    }
+    cout << "Shortest Path Length: " << smallest << endl;
+    cout << "The shortest paths between friends occur between:" << endl;
+    for (unsigned i = 0; i < shortest_paths.size(); i++) {
+        cout << shortest_paths[i] << endl;
+    } 
+}
+
+void Graph::print_longest_paths(const vector<vector<double>> fw_matrix, bool double_directed) {
+    double longest = find_min_max_paths(fw_matrix)[1];
+
+    // Compile all relationships that have the min and max path length
+    std::vector<std::string> longest_paths;
+
+    // This loop traverses the upper triangle (including diagonal) of the square floyd-warshall matrix
+    unsigned cur_row = 0;
+    for (unsigned i = 0; i < fw_matrix[0].size(); i++) {
+        for (unsigned j = cur_row; j < fw_matrix[0].size(); j++) {
+            if (fw_matrix[i][j] == longest && !double_directed) {
+                string longest_path = "Friend " + to_string(i) + " -> Friend " + to_string(j);
+                longest_paths.push_back(longest_path);
+            }
+            if (fw_matrix[i][j] == longest && double_directed) {
+                string longest_path = "Friend " + to_string(i) + " <-> Friend " + to_string(j);
+                longest_paths.push_back(longest_path);
+            }
+        }
+        cur_row++;
+    }
+    cout << "Longest Path Length: " << longest << endl;
+    cout << "The longest paths between friends occur between:" << endl;
+    for (unsigned i = 0; i < longest_paths.size(); i++) {
+        cout << longest_paths[i] << endl;
+    } 
+}
+
+vector<double> Graph::find_min_max_paths(const vector<vector<double>> matrix) {
+    // First find smallest and longest path length
+    double smallest = __INT_MAX__; 
+    double longest = 0.0;
+
+    for (unsigned i = 0; i < matrix[0].size(); i++) {
+        for (unsigned j = 0; j < matrix[0].size(); j++) {
+            if (matrix[i][j] < smallest && matrix[i][j] != 0.0) {
+                smallest = matrix[i][j];
+            }
+            if (matrix[i][j] > longest) {
+                longest = matrix[i][j];
+            }
+        }
+    }
+    vector<double> min_max_vals {smallest, longest};
+    return min_max_vals;
+}
+
+vector<Vertex> Graph::get_vertices() {
+    return vertices;
 }

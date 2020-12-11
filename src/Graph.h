@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <iostream>
 
 using std::string;
@@ -233,13 +234,41 @@ class Graph {
          * 
          * @param g Graph to do algorithm on
          */
-        vector<vector<double>> FloydWarshall(const Graph& g);
+        vector<vector<double>> FloydWarshall();
+
+        /**
+         * @brief Prints out shortest paths found by Floyd-Warshall
+         * 
+         * @param fw_matrix Floyd-Warshall matrix
+         * @param double_directed if graph is double directed
+         */
+        void print_shortest_paths(const vector<vector<double>> fw_matrix, bool double_directed);
+
+        /**
+         * @brief Prints out longest paths found by Floyd-Warshall
+         * 
+         * @param fw_matrix Floyd-Warshall matrix
+         * @param double_directed if graph is double directed
+         */
+        void print_longest_paths(const vector<vector<double>> fw_matrix, bool double_directed);
+
+        /**
+         * @brief Returns vector of all vertices in graph
+         * 
+         * @return vector<Vertex> vector of all vertices in the graph
+         */
+        vector<Vertex> get_vertices();
 
     private:
         /**
          * @brief Adjacency matrix
          */
         vector<vector<double>> matrix_;
+
+        /**
+         * @brief Vector of vertices in graph
+         */
+        vector<Vertex> vertices;
 
         /**
          * @brief Helper function for both constructors. Creates the Adjacency Matrix.
@@ -252,4 +281,12 @@ class Graph {
          */
         void __init(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
 
+        /**
+         * @brief Finds smallest and largest lengths of paths in graph
+         * 
+         * @param mat Matrix
+         * 
+         * @return vector<double> contains min path length and max path length in indices 0 and 1 respectively
+         */
+        vector<double> find_min_max_paths(const vector<vector<double>> fw_matrix);
 };
