@@ -146,7 +146,7 @@ TEST_CASE("Longer IDDFS", "[graph][functions][directed][Search][IDDFS]") {
 	REQUIRE(trav == test);
 }
 
-TEST_CASE("IDDFS find itsself", "[graph][functions][directed][Search][IDDFS]") {
+TEST_CASE("IDDFS find itself", "[graph][functions][directed][Search][IDDFS]") {
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
 
