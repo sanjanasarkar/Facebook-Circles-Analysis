@@ -225,7 +225,7 @@ vector<int> Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<
     return dfsTraversal;
 }
 
-vector<vector<double>> Graph::FloydWarshall(const Graph& g) {
+vector<vector<double>> Graph::FloydWarshall() {
     int INFINITY = __INT_MAX__;
     int num_vertices = getSize();
     int n = num_vertices;
