@@ -120,3 +120,15 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 	single_dir.changeWeight(Graph::Edge(0, 1, 0.1234));
 	REQUIRE(single_dir.getWeight(0, 1) == 0.1234);
 }
+
+TEST_CASE("Simple BFS test", "[graph][functions][directed]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_simple.txt");
+
+	Graph single_dir = Graph(lines, false);
+	Graph double_dir = Graph(lines, true);
+
+	vector<int> path = double_dir.BFS(0, double_dir);
+	for (auto num : path) {
+		cout << num;
+	}
+}
