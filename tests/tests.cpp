@@ -120,3 +120,62 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 	single_dir.changeWeight(Graph::Edge(0, 1, 0.1234));
 	REQUIRE(single_dir.getWeight(0, 1) == 0.1234);
 }
+
+TEST_CASE("Simple IDDFS", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 1, 100, g);
+	REQUIRE(trav.size() == 2);
+	REQUIRE(trav[0] == 0);
+	REQUIRE(trav[1] == 1);
+
+	trav = g.iddfs(0, 6, 100, g);
+	REQUIRE(trav.size() == 3);
+	REQUIRE(trav[0] == 0);
+	REQUIRE(trav[1] == 2);
+	REQUIRE(trav[2] == 6);
+
+	trav = g.iddfs(3, 99, 200, g);
+	REQUIRE(trav.size() == 10);
+	REQUIRE(trav[0] == 3);
+	REQUIRE(trav[1] == 4);
+	REQUIRE(trav[9] == 99);
+}
+
+TEST_CASE("Longer IDDFS", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(3, 99, 200, g);
+	REQUIRE(trav.size() == 10);
+	REQUIRE(trav[0] == 3);
+	REQUIRE(trav[1] == 4);
+	REQUIRE(trav[2] == 5);
+	REQUIRE(trav[9] == 99);
+}
+
+TEST_CASE("IDDFS find itsself", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 0, 100, g);
+	REQUIRE(trav.size() == 1);
+	REQUIRE(trav[0] == 0);
+
+	trav = g.iddfs(6, 6, 100, g);
+	REQUIRE(trav.size() == 1);
+	REQUIRE(trav[0] == 6);
+
+}
+
+TEST_CASE("IDDFS find nonexistent", "[graph][functions][directed][Search][IDDFS]") {
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph g = Graph(lines, false);
+
+	vector<int> trav = g.iddfs(0, 100, 100, g);
+	REQUIRE(trav.size() == 0);
+
+	trav = g.iddfs(6, 100, 100, g);
+	REQUIRE(trav.size() == 0);
+}
