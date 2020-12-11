@@ -115,11 +115,24 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
     return out;
 }
 
+
+// IDDFS: do a depth first search, but limit the max depth of the search starting at 1.
+// if not found, make max_depth deeper and do the depth limited search at a deeper level
+// until the node is found. Theoretically combines DFS's space efficiency w/ bfs's speed.
+
+// Time complexity: O(b^d)
+// Space complexity: O(bd)
+// (b is breadth, d is depth)
 vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
-    for (int i = 0; i < max_depth; i++) {
+    
+    for (int i = 1; i < max_depth; i++) {
+        // init the traversal, as well as a vector that is the reverse
         vector<int> trav;
         vector<int> reverse;
+
+        // do the dls, go deeper if failed
         if (dls(start, end, i, trav, g)) {
+            // flip the output to have the correct order, might slow it down (not 100% needed)
             for (int i = int(trav.size())-1; i >= 0 ; i--) {
                 reverse.push_back(trav[i]);
             }
@@ -129,7 +142,11 @@ vector<int> Graph::iddfs(int start, int end, int max_depth, const Graph& g) {
     return vector<int>();
 }
 
+// recursivly do the depth limited search
 bool Graph::dls(int start, int end, int limit, vector<int> &path, const Graph& g) {
+   
+
+    // base case
     if (start == end) {
         path.push_back(start);
         return true;
