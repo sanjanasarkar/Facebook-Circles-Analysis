@@ -49,4 +49,3 @@ TEST_CASE("Shortest Path test simple - double directed", "[floyd-warshall][simpl
 	vector<vector<double>> fw_mat = g.FloydWarshall();
 	REQUIRE(expected == fw_mat);
 }
-
