@@ -315,7 +315,7 @@ class Graph {
          * @brief Begins interaction with user and guides them through the program
          * 
          */
-        void start_presentation();
+        void start_presentation(bool is_full_dataset);
 
     private:
         /**

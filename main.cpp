@@ -9,11 +9,35 @@ int main() {
     start:
         int graph_file = -1;
         int double_dir = -1;
+        int full_subset;
+        bool is_full_dataset;
+
+        // Welcome Message
         cout << endl << "**********************************" << endl;
         cout << "* Hello! Welcome to our project! *" << endl;
-        // Include code for whole dataset here
-        while (graph_file == -1){
-            cout << "**********************************" << endl;
+        cout << "**********************************" << endl;
+
+        // Choosing between full dataset and subsets
+        SUBSET:
+        cout << "To begin, would you like to see our program work on" << endl;
+        cout << "1. Full Dataset (WARNING: FUNCTIONALITY MAY SUFFER DUE TO SIZE OF DATASET)" << endl;
+        cout << "2. Subsets of Dataset" << endl;
+        cout << "Please type '1' or '2'" << endl;
+        cin >> full_subset;
+        cout << endl;
+
+        if (full_subset == 1) {
+            is_full_dataset = true;
+        } else if (full_subset == 2) {
+            is_full_dataset = false;
+        } else {
+            cout << "Sorry, that command was not recognized. Please try again." << endl;
+            cout << endl;
+            goto SUBSET;
+        }
+        
+        // Picked subset
+        while (!is_full_dataset && graph_file == -1){
             cout << "Which graph are you interested in taking a closer look at?" << endl;
             cout << "1. Simple" << endl << "2. Complex" << endl;
             cout << "Please type '1' or '2': ";
@@ -27,12 +51,13 @@ int main() {
             }
         }
         
-        // Deciding between simple and complex graph
-        if (graph_file == 1) {
+        // Deciding between simple and complex graph (ONLY if subset was picked)
+        if (!is_full_dataset && graph_file == 1) {  // Simple
             lines = FileReader::fileToVector("data/simple_graph.txt");
-        } else if (graph_file == 2) {
-            // lines = FileReader::fileToVector("data/complex_graph.txt");
-            lines = FileReader::fileToVector("tests/test_data_complex_path.txt");
+        } else if (!is_full_dataset && graph_file == 2) {  // Complex
+            lines = FileReader::fileToVector("data/complex_graph.txt");
+        } else if (is_full_dataset) {  // Full Dataset
+            lines = FileReader::fileToVector("data/facebook_combined.txt");
         } else {
             cout << "Sorry, that command is not recognized. Try Again." << endl;
             graph_file = -1;
@@ -65,7 +90,7 @@ int main() {
 
     bool double_directed = double_dir - 1;
     Graph g(lines, double_directed);
-    g.start_presentation();
+    g.start_presentation(is_full_dataset);
     
 
     // // vector<Vertex> verts = g.get_vertices();
