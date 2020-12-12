@@ -702,8 +702,11 @@ void Graph::start_presentation(bool is_full_dataset) {
 
                 cout << endl << "********************************" << endl << "Checking Search Run Times" << endl << endl;
 
-                //  Initialize start and end for search
-                int start = -1, end = -1;
+                //  Initialize variables for search
+                int start = -1, end = -1, first = 0, last = this->getMaxVertex();
+
+                // print vertices options
+                cout << "Vertices in graph range from " << first << " and " << last << endl;
 
                 // Select start value
                 while (start == -1) {
