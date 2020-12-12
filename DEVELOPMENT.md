@@ -12,14 +12,8 @@ We also decided that updating Development.md, creating documentation, the final 
 
 # WEEK 2:
 
-The first implementation was the Graph. We chose a custom implementation instead of the one provided for lab_ml because we wanted to use an Adjacency Matrix for fast lookup and to be able to more easily perform Google Page Rank, which uses a Markov matrix built off the Adjacency Matrix. We made a simple FileReader class to read from a text file. The Graph implementation can currently read from a FileReader, build the object, and has several helper functions and appropriate getters and setters. It also has an alternate constructor which allows for easier testing, without needing a new text file. 
-
-### 12/5/20
-
-Over the past few days we implemented the iterative-deepening DFS. This method should combine DFS's space efficiency with BFS's speed. This method has space complexity O(bd) and time complexity O(b^d), where b is the Breadth and d is the depth of the graph.
-
-# DOUBLE CHECK THE BIG O ANALYSIS
+The first implementation was the Graph. We chose a custom implementation instead of the one provided for lab_ml because we wanted to use an Adjacency Matrix for fast lookup and to be able to more easily perform Google Page Rank, which uses a Markov matrix built off the Adjacency Matrix. We made a simple FileReader class to read from a text file. The Graph implementation can currently read from a FileReader, build the object, and has several helper functions and appropriate getters and setters. It also has an alternate constructor which allows for easier testing, without needing a new text file. Over the next few days we implemented the iterative-deepening DFS. This method should combine DFS's space efficiency with BFS's speed. This method has space complexity O(bd) and time complexity O(b^d), where b is the Breadth and d is the depth of the graph.
 
 # WEEK 3:
 
-The Graph class received some small modifications, including a few extra helper functions to help with some of the other algorithms. We also began developing our tests, and testing the Graph functionality found a few small bugs which were easily remedied.
+The Graph class received some small modifications, including a few extra helper functions to help with some of the other algorithms. We also began developing our tests, and testing the Graph functionality found a few small bugs which were easily remedied. The BFS and DFS algorithms were fully implemented and tested, along with the Floyd-Warshall shortest (and longest) path algorithm which was also tested. We also developed a simple text-based UI for the project, so that the user can 'explore' the different algorithms, the corresponding results, and time complexities. We then developed and implemented our plan for the presentation video.

@@ -245,7 +245,7 @@ void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &d
 /****************************** Shortest Path Alg Functions ******************************/
 
 vector<vector<double>> Graph::FloydWarshall() {
-    int INFINITY = __INT_MAX__;
+    int INF = __INT_MAX__;
     int num_vertices = getSize();
     int n = num_vertices;
     vector<vector<double>> floyd_warsh_matrix(n, vector<double>(n, 0.0));
@@ -259,7 +259,7 @@ vector<vector<double>> Graph::FloydWarshall() {
             } else if (i == j) { // Check if vertex points to self (e.g. Vertex A to Vertex A)
                 floyd_warsh_matrix[i][j] = 0.0;
             } else { // Set pairs with no relationship to infinity
-                floyd_warsh_matrix[i][j] = INFINITY;
+                floyd_warsh_matrix[i][j] = INF;
             }
         }
     }
@@ -371,7 +371,7 @@ vector<double> Graph::find_min_max_paths(const vector<vector<double>> matrix) {
 }
 
 /*************************** I/O Driver Code ***************************/
-void Graph::start_presentation() {
+void Graph::start_presentation(bool is_full_dataset) {
     vector<string> lines;
     cout << "We examined a dataset of social circles on Facebook" << endl;
     Current_State current_state = Current_State::MENU;
@@ -433,7 +433,7 @@ void Graph::start_presentation() {
                 break;
             }
             case Current_State::STRUCTURE: {
-                /************* ADD STRUCTURE OUTPUT HERE *************/
+                /************* STRUCTURE OUTPUT HERE *************/
                 cout << "Overall Graph Structure" << endl;
                 cout << "Number of Nodes in Facebook graph: " << getSize() << endl;
 
@@ -441,9 +441,14 @@ void Graph::start_presentation() {
                 cout << "Subset of Adjacency matrix with dimensions [" << dim << "] x [" << dim << "]: " << endl;
                 cout << endl;
 
-                // Prints out subset of adjacency matrix. Starts at matrix[0][0] and goes to matrix[dim][dim]
-                vector<vector<double>> adj_mat = this->getAdjacencyMatrix();
-                cout << *this << endl;
+                if (!is_full_dataset) {
+                    // Prints out subset of adjacency matrix. Starts at matrix[0][0] and goes to matrix[dim][dim]
+                    vector<vector<double>> adj_mat = this->getAdjacencyMatrix();
+                    cout << *this << endl;
+                } else {
+                    cout << "Sorry, adjacency matrix cannot be displayed due to its size" << endl;
+                    cout << endl;
+                }
 
                 current_state = Current_State::MENU;
                 break;
@@ -451,7 +456,7 @@ void Graph::start_presentation() {
 
             TRAVERSALS:
             case Current_State::TRAVERSALS: {
-                /************* ADD TRAVERSALS OUTPUT HERE *************/
+                /************* TRAVERSALS OUTPUT HERE *************/
                 cout << "Traversals" << endl;
                 cout << endl;
                 cout << "Choose between the following options: " << endl;
@@ -495,7 +500,7 @@ void Graph::start_presentation() {
                     }
                 }
 
-                // preform traversals based on selector
+                // perform traversals based on selector
                 switch(selector) {
                     case 1:
                         path = this->BFS(start, * this);
@@ -520,37 +525,46 @@ void Graph::start_presentation() {
                 break;
             }
             case Current_State::SHORTESTPATH: {
+                /************* SHORTEST PATH OUTPUT HERE *************/
                 cout << "Shortest Path - Floyd-Warshall Algorithm" << endl;
                 cout << endl;
 
-                vector<vector<double>> fw_mat = this->FloydWarshall();
-                cout << "All-Pairs matrix: " << endl;
+                if (!is_full_dataset) {
+                    vector<vector<double>> fw_mat = this->FloydWarshall();
+                    cout << "All-Pairs matrix: " << endl;
 
-                unsigned size = this->getSize();
-                // Prints out floyd-warshall matrix
-                for (unsigned i = 0; i < size; i++) {
-                    for (unsigned j = 0; j < size; j++) {
-                        if (fw_mat[i][j] == __INT_MAX__) {
-                            std::cout << " " << "INF";
-                            continue;
+                    unsigned size = this->getSize();
+                    // Prints out floyd-warshall matrix
+                    for (unsigned i = 0; i < size; i++) {
+                        for (unsigned j = 0; j < size; j++) {
+                            if (fw_mat[i][j] == __INT_MAX__) {
+                                std::cout << " " << "INF";
+                                continue;
+                            }
+                            std::cout << " " << fw_mat[i][j];
                         }
-                        std::cout << " " << fw_mat[i][j];
+                        std::cout << std::endl;
                     }
-                    std::cout << std::endl;
+                    cout << endl;
+                    // Printing longest paths in graph
+                    this->print_longest_paths(fw_mat, is_double_directed);
+                    cout << endl;
+                    // Printing shortest paths in graph
+                    this->print_shortest_paths(fw_mat, is_double_directed);
+                    cout << endl;
+                } else {
+                    cout << "Sorry, nothing to see here!" << endl;
+                    cout << "Floyd-Warshall runs with a time complexity of O(n^3) ";
+                    cout << "therefore, on a graph of this size, it would take hours to run." << endl;
+                    cout << "Try a smaller subset of data!" << endl;
+                    cout << endl;
                 }
-                cout << endl;
-                // Printing longest paths in graph
-                this->print_longest_paths(fw_mat, is_double_directed);
-                cout << endl;
-                // Printing shortest paths in graph
-                this->print_shortest_paths(fw_mat, is_double_directed);
-                cout << endl;
 
                 current_state = Current_State::MENU;
                 break;
             }
             case Current_State::COMPLEXALG: {
-                /************* ADD COMPLEXALG OUTPUT HERE *************/
+                /************* COMPLEXALG OUTPUT HERE *************/
                 cout << "********************************" << endl << "Complex Alg - IDDFS" << endl << endl;
                 current_state = Current_State::MENU;
                 //vector<int> trav;
