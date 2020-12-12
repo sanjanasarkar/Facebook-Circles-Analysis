@@ -41,7 +41,6 @@ Graph::Graph(const vector<string>& lines, bool double_directed) {
     for (size_t i = 0; i < lines.size()/2; ++i) {
         Graph::Edge edge(lines[2*i], lines[2*i + 1], 1);
         edges.push_back(edge);
-
         max_node = std::max(edge.maxVertex(), max_node);
     }
 
@@ -111,9 +110,8 @@ vector<Vertex> Graph::get_vertices() {
 }
 
 bool operator==(const Graph& lhs, const Graph& rhs) {
-    if (lhs.matrix_.size() != rhs.matrix_.size() || lhs.matrix_[0].size() != rhs.matrix_.size()) {
+    if (lhs.matrix_.size() != rhs.matrix_.size() || lhs.matrix_[0].size() != rhs.matrix_.size())
         return false;
-    }
 
     for (size_t i = 0; i < lhs.matrix_.size(); i++) {
         for (size_t j = 0; j < lhs.matrix_[i].size(); j++) {
@@ -128,9 +126,7 @@ bool operator==(const Graph& lhs, const Graph& rhs) {
 std::ostream& operator<<(std::ostream& out, const Graph& g) {
     for (size_t i = 0; i < g.matrix_.size(); i++) {
         out << "[ ";
-        for (size_t j = 0; j < g.matrix_.at(i).size(); j++) {
-            out << g.matrix_[i][j] << " ";
-        }
+        for (size_t j = 0; j < g.matrix_.at(i).size(); j++) out << g.matrix_[i][j] << " ";
         out << "]" << std::endl;
     }
     return out;
@@ -149,15 +145,12 @@ vector<int> Graph::iddfs(int start, int end, int max_depth) {
     
     for (int i = 1; i < max_depth; i++) {
         // init the traversal, as well as a vector that is the reverse
-        vector<int> trav;
-        vector<int> reverse;
+        vector<int> trav, reverse;
 
         // do the dls, go deeper if failed
         if (dls(start, end, i, trav)) {
             // flip the output to have the correct order, might slow it down (not 100% needed)
-            for (int i = int(trav.size())-1; i >= 0 ; i--) {
-                reverse.push_back(trav[i]);
-            }
+            for (int i = int(trav.size())-1; i >= 0 ; i--) reverse.push_back(trav[i]);
             return reverse;
         }
     }
@@ -173,9 +166,8 @@ bool Graph::dls(int start, int end, int limit, vector<int> &path) {
         return true;
     }
     // stop if depth limit is reached
-    if (limit <= 0) {
-        return false;
-    }
+    if (limit <= 0) return false;
+
     // otherwise recurse through all connected vertices
     vector<Graph::Edge> adj = getOutgoingEdges(start);
     for (unsigned i = 0; i < adj.size(); i++) {
@@ -196,22 +188,23 @@ bool Graph::dls(int start, int end, int limit, vector<int> &path) {
  * AFTER the adjency matrix is set up we can finally call the BFS function.
  * Create a visited array to avoid cycles
  * Given a starting node and target node check all adjacent nodes and move to the next node unless already visited
- * Recursively does this to build array of nodes that marks the shortest path
+ * Use queue to store values to add to array
  * returns array containing path from one node to the other
  */
 
 vector<int> Graph::BFS(int start, const Graph& g) {
+    // initialize values
     vector<bool> visited(g.matrix_.size(), false);
     vector<int> queue, traversal;
     int vs;
 
+    // start queue and visited array
     queue.push_back(start);
-
     visited[start] = true;
 
+    // execute BFS Algorithm
     while (!queue.empty()) {
         vs = queue[0];
-
         traversal.push_back(vs);
         queue.erase(queue.begin());
 
@@ -226,29 +219,40 @@ vector<int> Graph::BFS(int start, const Graph& g) {
     return traversal;
 }
 
+/*
+ * DFS Implementation with the main same idea as BFS except with the DFS algorithm instead.
+ * Also to avoid recursion problems the main array is passed through as a reference so the function doesn't return the array,
+ * it just builds it through execution.
+ */
 void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+    // start visited and traversal array values
     dfsTraversal.push_back(start);
     visited[start] = true;
+
+    // execute DFS recursive algorithm
     for (int i = 0; i < int(g.matrix_.size()); i++) {
         if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
     }
 }
 
 /****************************** Basic Search Functions ******************************/
+
 vector<int> Graph::Search_BFS(int start, int end, const Graph& g) {
+    // same as the BFS() code initially
     vector<bool> visited(g.matrix_.size(), false);
     vector<int> queue, traversal;
     int vs;
 
     queue.push_back(start);
-
     visited[start] = true;
 
     while (!queue.empty()) {
         vs = queue[0];
-
         traversal.push_back(vs);
+
+        // check if the BFS algorithm has found the target and return that path if it has
         if (vs == end) return traversal;
+
         queue.erase(queue.begin());
 
         for (int i = 0; i < int(g.matrix_.size()); i++) {
@@ -259,15 +263,20 @@ vector<int> Graph::Search_BFS(int start, int end, const Graph& g) {
         }
     }
 
+    // if value isn't found just return the full traversal of graph
     return traversal;
 }
 
 void Graph::Search_DFS(int start, int end, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+    // check if target value has been found and added in array to make sure that it doesn't go further recursively if it has
     if(find(dfsTraversal.begin(), dfsTraversal.end(), end) != dfsTraversal.end()) return;
+
+    // same as DFS() for the most part
     dfsTraversal.push_back(start);
     visited[start] = true;
     if (start == end) return;
     for (int i = 0; i < int(g.matrix_.size()); i++) {
+        // add condition that checks if the target has been found to prevent unnecessary recursion
         if (g.matrix_[start][i] == 1 && (!visited[i]) && start != end) Search_DFS(i, end, g, visited, dfsTraversal);
     }
 }
@@ -275,22 +284,16 @@ void Graph::Search_DFS(int start, int end, const Graph& g, vector<bool> &visited
 /****************************** Shortest Path Alg Functions ******************************/
 
 vector<vector<double>> Graph::FloydWarshall() {
-    int INFINITY = __INT_MAX__;
-    int num_vertices = getSize();
-    int n = num_vertices;
+    int INFINITY = __INT_MAX__, num_vertices = getSize(), n = num_vertices;
     vector<vector<double>> floyd_warsh_matrix(n, vector<double>(n, 0.0));
     
     // Initialize adjacency matrix to +inf and set diagonal to 0.0 
     for (int i = 0; i < num_vertices; i++) {
         for (int j = 0; j < num_vertices; j++) {
             // Check if there is a connection (All edge weights = 1. No further calculations needed)
-            if (matrix_[i][j] == 1) {
-                floyd_warsh_matrix[i][j] = matrix_[i][j];
-            } else if (i == j) { // Check if vertex points to self (e.g. Vertex A to Vertex A)
-                floyd_warsh_matrix[i][j] = 0.0;
-            } else { // Set pairs with no relationship to infinity
-                floyd_warsh_matrix[i][j] = INFINITY;
-            }
+            if (matrix_[i][j] == 1) floyd_warsh_matrix[i][j] = matrix_[i][j];
+            else if (i == j) floyd_warsh_matrix[i][j] = 0.0; // Check if vertex points to self (e.g. Vertex A to Vertex A)
+            else floyd_warsh_matrix[i][j] = INFINITY; // Set pairs with no relationship to infinity
         }
     }
 
@@ -298,9 +301,8 @@ vector<vector<double>> Graph::FloydWarshall() {
     for (int w = 0; w < num_vertices; w++) {
         for (int u = 0; u < num_vertices; u++) {
             for (int v = 0; v < num_vertices; v++) {
-                if (floyd_warsh_matrix[u][v] > floyd_warsh_matrix[u][w] + floyd_warsh_matrix[w][v]) {
+                if (floyd_warsh_matrix[u][v] > floyd_warsh_matrix[u][w] + floyd_warsh_matrix[w][v])
                     floyd_warsh_matrix[u][v] = floyd_warsh_matrix[u][w] + floyd_warsh_matrix[w][v];
-                }
             }
         }
     }
@@ -335,14 +337,10 @@ void Graph::print_shortest_paths(const vector<vector<double>> fw_matrix, bool do
     if (shortest_paths.size() > 30) {
         lim = 30;
         cout << "NOTE: The following output is truncated for printing purposes:" << endl;
-    } else {
-        lim = shortest_paths.size();
-    }
+    } else lim = shortest_paths.size();
 
     cout << "The shortest paths occur between:" << endl;
-    for (unsigned i = 0; i < lim; i++) {
-        cout << shortest_paths[i] << endl;
-    } 
+    for (unsigned i = 0; i < lim; i++) cout << shortest_paths[i] << endl;
 }
 
 void Graph::print_longest_paths(const vector<vector<double>> fw_matrix, bool double_directed) {
@@ -371,29 +369,23 @@ void Graph::print_longest_paths(const vector<vector<double>> fw_matrix, bool dou
     if (longest_paths.size() > 30) {
         lim = 30;
         cout << "NOTE: The following output is truncated for printing purposes:" << endl;
-    } else {
-        lim = longest_paths.size();
-    }
+    } else lim = longest_paths.size();
 
     cout << "The longest paths occur between:" << endl;
-    for (unsigned i = 0; i < lim; i++) {
+    for (unsigned i = 0; i < lim; i++)
         cout << longest_paths[i] << endl;
-    } 
 }
 
 vector<double> Graph::find_min_max_paths(const vector<vector<double>> matrix) {
     // First find smallest and longest path length
-    double smallest = __INT_MAX__; 
-    double longest = 0.0;
+    double smallest = __INT_MAX__, longest = 0.0;
 
     for (unsigned i = 0; i < matrix[0].size(); i++) {
         for (unsigned j = 0; j < matrix[0].size(); j++) {
-            if (matrix[i][j] < smallest && matrix[i][j] != 0.0) {
+            if (matrix[i][j] < smallest && matrix[i][j] != 0.0)
                 smallest = matrix[i][j];
-            }
-            if (matrix[i][j] > longest && matrix[i][j] != __INT_MAX__) {
+            if (matrix[i][j] > longest && matrix[i][j] != __INT_MAX__)
                 longest = matrix[i][j];
-            }
         }
     }
     vector<double> min_max_vals {smallest, longest};
@@ -405,17 +397,14 @@ void Graph::start_presentation(bool is_full_dataset) {
     vector<string> lines;
     cout << "We examined a dataset of social circles on Facebook" << endl;
     Current_State current_state = Current_State::MENU;
-    bool structure = false;
-    bool traversals = false;
-    bool shortpath = false;
-    bool complexalg = false;
-    bool timecomplexity = false;
+    bool structure = false, traversals = false, shortpath = false, complexalg = false, timecomplexity = false;
 
     LOOP:
     while (!(structure && traversals && shortpath && complexalg && timecomplexity)) {
         switch(current_state) {
             MENU_START:
             case Current_State::MENU: {
+                // Menu Print Out (checks for data set type to change output accordingly)
                 cout << "**********************************" << endl;
                 cout << "What would you like to see?"  << endl;
                 cout << "1. Graph Structure" << endl;
@@ -424,17 +413,20 @@ void Graph::start_presentation(bool is_full_dataset) {
                 if (!is_full_dataset) cout << "4. Complex Algorithm" << endl;
                 (is_full_dataset) ? cout << "3. Runtimes of Traversals and Searches" << endl : cout << "5. Run Times of Traversals and Searches" << endl;
                 (is_full_dataset) ? cout << "4. Quit Program" << endl : cout << "6. Quit Program" << endl;
-                cout << "Type in the number: "; 
+                cout << "Type in the number: ";
+
+                // get number input
                 int num;
-                
                 cin >> num;
                 if (cin.fail()) {
-                    cout << endl << "sorry, you did not input an integer " << endl << endl;
+                    cout << endl << "Sorry, you did not input an integer. Try Again." << endl << endl;
                     cin.clear();
                     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     break;
                 }
                 cout << endl;
+
+                // State Machine
                 switch(num) {
                     case 1:
                         current_state = Current_State::STRUCTURE;
@@ -471,6 +463,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 }
                 break;
             }
+
             case Current_State::STRUCTURE: {
                 /************* STRUCTURE OUTPUT HERE *************/
                 cout << "Overall Graph Structure" << endl;
@@ -484,10 +477,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                     // Prints out subset of adjacency matrix. Starts at matrix[0][0] and goes to matrix[dim][dim]
                     vector<vector<double>> adj_mat = this->getAdjacencyMatrix();
                     cout << *this << endl;
-                } else {
-                    cout << "Sorry, adjacency matrix cannot be displayed due to its size" << endl;
-                    cout << endl;
-                }
+                } else cout << "Sorry, adjacency matrix cannot be displayed due to its size." << endl << endl;
 
                 current_state = Current_State::MENU;
                 break;
@@ -496,8 +486,7 @@ void Graph::start_presentation(bool is_full_dataset) {
             TRAVERSALS:
             case Current_State::TRAVERSALS: {
                 /************* TRAVERSALS OUTPUT HERE *************/
-                cout << "Traversals" << endl;
-                cout << endl;
+                cout << "Traversals" << endl << endl;
                 cout << "Choose between the following options: " << endl;
                 cout << "1. BFS" << endl << "2. DFS" << endl;
                 cout << "Type in the number: ";
@@ -511,7 +500,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 // choose traversal
                 cin >> selector;
                 if (cin.fail()) {
-                    cout << endl << "sorry, you did not input an integer " << endl << endl;
+                    cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                     cin.clear();
                     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     break;
@@ -524,15 +513,16 @@ void Graph::start_presentation(bool is_full_dataset) {
                 while (start == -1) {
                     cout << "**********************************" << endl << "What node do you want to start at?" << endl;
                     cout << "Type in the number: ";
+
                     cin >> start;
                     if (cin.fail()) {
-                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         start = -1;
                     }
                     if (this->getOutgoingEdges(start).size() == 0) {
-                        cout << endl << "sorry, that vertix doesn't exist, try again " << endl << endl;
+                        cout << endl << "Sorry, that vertex doesn't exist. Try again." << endl << endl;
                         start = -1;
                     }
                 }
@@ -552,8 +542,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                         cout << endl;
                         break;
                     default:
-                        cout << "Sorry, that command is not recognized. Try Again." << endl;
-                        cout << endl;
+                        cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
                         selector = -1;
                         goto TRAVERSALS;
                 }
@@ -561,16 +550,16 @@ void Graph::start_presentation(bool is_full_dataset) {
                 current_state = Current_State::MENU;
                 break;
             }
+
             case Current_State::SHORTESTPATH: {
                 /************* SHORTEST PATH OUTPUT HERE *************/
-                cout << "Shortest Path - Floyd-Warshall Algorithm" << endl;
-                cout << endl;
+                cout << "Shortest Path - Floyd-Warshall Algorithm" << endl << endl;
 
                 if (!is_full_dataset) {
                     vector<vector<double>> fw_mat = this->FloydWarshall();
                     cout << "All-Pairs matrix: " << endl;
-
                     unsigned size = this->getSize();
+
                     // Prints out floyd-warshall matrix
                     for (unsigned i = 0; i < size; i++) {
                         for (unsigned j = 0; j < size; j++) {
@@ -582,24 +571,23 @@ void Graph::start_presentation(bool is_full_dataset) {
                         }
                         std::cout << std::endl;
                     }
+
                     cout << endl;
-                    // Printing longest paths in graph
-                    this->print_longest_paths(fw_mat, is_double_directed);
+                    this->print_longest_paths(fw_mat, is_double_directed); // Printing longest paths in graph
                     cout << endl;
-                    // Printing shortest paths in graph
-                    this->print_shortest_paths(fw_mat, is_double_directed);
+                    this->print_shortest_paths(fw_mat, is_double_directed); // Printing shortest paths in graph
                     cout << endl;
                 } else {
                     cout << "Sorry, nothing to see here!" << endl;
                     cout << "Floyd-Warshall runs with a time complexity of O(n^3) ";
                     cout << "therefore, on a graph of this size, it would take hours to run." << endl;
-                    cout << "Try a smaller subset of data!" << endl;
-                    cout << endl;
+                    cout << "Try a smaller subset of data!" << endl << endl;
                 }
 
                 current_state = Current_State::MENU;
                 break;
             }
+
             case Current_State::COMPLEXALG: {
                 /************* COMPLEXALG OUTPUT HERE *************/
                 cout << "********************************" << endl << "Complex Alg - IDDFS" << endl << endl;
@@ -608,20 +596,19 @@ void Graph::start_presentation(bool is_full_dataset) {
                 // display vertices
                 cout << "Vertices in graph range from: 0 to " << this -> getMaxVertex() << endl;
 
-                int start = -1;
-                int end = -1;
+                int start = -1, end = -1;
 
                 while (start == -1) {
                     cout << "**********************************" << endl << "What node do you want to start at?" << endl;
                     cin >> start;
                     if (cin.fail()) {
-                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         start = -1;
                     }
                     if (this->getOutgoingEdges(start).size() == 0) {
-                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        cout << endl << "Sorry, that vertex doesn't exist. Try Again. " << endl << endl;
                         start = -1;
                     }
                 }
@@ -630,13 +617,13 @@ void Graph::start_presentation(bool is_full_dataset) {
                     cout << "********************************" << endl << "What node do you want to end at?" << endl;
                     cin >> end;
                     if (cin.fail()) {
-                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         end = -1;
                     }
                     if (this->getOutgoingEdges(end).size() == 0) {
-                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        cout << endl << "Sorry, that vertex doesn't exist. Try Again. " << endl << endl;
                         end = -1;
                     }
                 }
@@ -658,6 +645,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 
                 break;
             }
+
             case Current_State::TIMECOMPLEXITY: {
                 cout << "********************************" << endl << "Checking Traversal Run Times" << endl << endl;
                 current_state = Current_State::MENU;
@@ -696,13 +684,13 @@ void Graph::start_presentation(bool is_full_dataset) {
                     cout << "**********************************" << endl << "What node do you want to start at?" << endl;
                     cin >> start;
                     if (cin.fail()) {
-                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         start = -1;
                     }
                     if (this->getOutgoingEdges(start).size() == 0) {
-                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        cout << endl << "Sorry, that vertex doesn't exist. Try Again. " << endl << endl;
                         start = -1;
                     }
                 }
@@ -712,13 +700,13 @@ void Graph::start_presentation(bool is_full_dataset) {
                     cout << "********************************" << endl << "What node do you want to end at?" << endl;
                     cin >> end;
                     if (cin.fail()) {
-                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                         cin.clear();
                         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         end = -1;
                     }
                     if (this->getOutgoingEdges(end).size() == 0) {
-                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        cout << endl << "Sorry, that vertex doesn't exist. Try Again. " << endl << endl;
                         end = -1;
                     }
                 }

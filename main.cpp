@@ -7,9 +7,7 @@
 int main() {   
     vector<string> lines;    
     start:
-        int graph_file = -1;
-        int double_dir = -1;
-        int full_subset;
+        int graph_file = -1, double_dir = -1, full_subset;
         bool is_full_dataset;
 
         // Welcome Message
@@ -31,8 +29,7 @@ int main() {
         } else if (full_subset == 2) {
             is_full_dataset = false;
         } else {
-            cout << "Sorry, that command was not recognized. Please try again." << endl;
-            cout << endl;
+            cout << "Sorry, that command was not recognized. Please try again." << endl << endl;
             goto SUBSET;
         }
         
@@ -44,7 +41,7 @@ int main() {
             cin >> graph_file;
             cout << endl;
             if (cin.fail()) {
-                cout << "sorry, you did not input an integer " << endl << endl;
+                cout << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 graph_file = -1;
@@ -52,29 +49,25 @@ int main() {
         }
         
         // Deciding between simple and complex graph (ONLY if subset was picked)
-        if (!is_full_dataset && graph_file == 1) {  // Simple
-            lines = FileReader::fileToVector("data/simple_graph.txt");
-        } else if (!is_full_dataset && graph_file == 2) {  // Complex
-            lines = FileReader::fileToVector("data/complex_graph.txt");
-        } else if (is_full_dataset) {  // Full Dataset
-            lines = FileReader::fileToVector("data/facebook_combined.txt");
-        } else {
+        if (!is_full_dataset && graph_file == 1) lines = FileReader::fileToVector("data/simple_graph.txt"); // Simple
+        else if (!is_full_dataset && graph_file == 2) lines = FileReader::fileToVector("data/complex_graph.txt"); // Complex
+        else if (is_full_dataset) lines = FileReader::fileToVector("data/facebook_combined.txt"); // Full Dataset
+        else {
             cout << "Sorry, that command is not recognized. Try Again." << endl;
             graph_file = -1;
             goto start;
         } 
 
         DIRECTION:
-
         while (double_dir == -1) {
             cout << "**********************************" << endl;
             cout << "Which graph are you interested in taking a closer look at?" << endl;
-            cout << "Single-Directed? or Double-Directed?" << endl;
+            cout << "Single-Directed? (RESULTS MAY NOT LOOK AS PRETTY) or Double-Directed? (RECOMMENDED)" << endl;
             cout << "Please type '1' or '2': ";
             cin >> double_dir;
             cout << endl;
             if (cin.fail()) {
-                cout << "sorry, you did not input an integer " << endl << endl;
+                cout << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 double_dir = -1;
@@ -82,8 +75,7 @@ int main() {
         }
         
         if (double_dir != 1 && double_dir != 2) {
-            cout << "Please choose a valid number" << endl;
-            cout << endl;
+            cout << "Please choose a valid number" << endl << endl;
             double_dir = -1;
             goto DIRECTION;
         }
@@ -91,44 +83,4 @@ int main() {
     bool double_directed = double_dir - 1;
     Graph g(lines, double_directed);
     g.start_presentation(is_full_dataset);
-    
-
-    // // vector<Vertex> verts = g.get_vertices();
-    // // for (unsigned i = 0; i < verts.size(); i++) {
-    // //     cout << verts[i] << " ";
-    // // }
-
-    // g.print_longest_paths(fw_mat, double_directed);
-    // g.print_shortest_paths(fw_mat, double_directed);
-    // // Do some cool algorithms here guys!
-  
-    // //std::cout << g << std::endl;
-    // //std::cout << f;
-    // std::cout << g.getSize() << std::endl;
-
-    // std::cout << " 1  ";
-    // // iddfs basic test
-    // vector<int> trav = g.iddfs(0, 341, 300, g);
-
-    // for (int i = 0; i < int(trav.size()); i++) {
-    //     std::cout << trav[i] << " ";
-    // }
-    // std::cout << "\n";
-
-    // // iddfs advanced test
-
-    // int max = 250;
-
-    // for (int i = 0; i < max; i++) {
-    //     for (int j = 0; j < max; j++) {
-    //         std::cout << i << " -> " << j << " :  ";
-
-    //         vector<int> trav = g.iddfs(i, j, 300, g);
-
-    //         for (int i = 0; i < int(trav.size()); i++) {
-    //             std::cout << trav[i] << " ";
-    //         }
-    //         printf("\n");
-    //     }
-    // }
 }

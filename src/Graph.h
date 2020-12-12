@@ -197,7 +197,7 @@ class Graph {
         inline size_t getSize() const { return matrix_.size(); }
 
         /**
-         * @brief Get the Max Vertex object Equivalent to getSize().
+         * @brief Get the Max Vertex object Equivalent to getSize() - 1.
          * 
          * @return Vertex Maximum Vertex magnitude
          */
@@ -251,7 +251,7 @@ class Graph {
         vector<int> iddfs(int start, int end, int max_depth);
 
         /**
-         * @brief Helper function for the IDDFS, recursivly does a depth-limited search
+         * @brief Helper function for the IDDFS, recursively does a depth-limited search
          * 
          * @param start Starting Vertex
          * @param end End Vertex
@@ -271,8 +271,7 @@ class Graph {
         vector<int> BFS(int start, const Graph& g);
 
         /**
-         * @brief DFS traversal to find shortest path from a vertex 
-         * - used to compare with Iterative Depth DFS implementation.
+         * @brief DFS traversal to find shortest path from a vertex - used to compare with Iterative Depth DFS implementation.
          * 
          * @param start starting graph vertex
          * @param g graph to be traversed.
@@ -304,10 +303,11 @@ class Graph {
          */
         void Search_DFS(int start, int end, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
 
-         /* @brief Floyd Warshall shortest path algorithm.
-         * 
-         * @param g Graph to do algorithm on
-         */
+         /**
+          * @brief Floyd Warshall shortest path algorithm.
+          * 
+          * @param g Graph to do algorithm on
+          */
         vector<vector<double>> FloydWarshall();
 
         /**
