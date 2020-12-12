@@ -419,11 +419,11 @@ void Graph::start_presentation(bool is_full_dataset) {
                 cout << "**********************************" << endl;
                 cout << "What would you like to see?"  << endl;
                 cout << "1. Graph Structure" << endl;
-                cout << "2. Traversals" << endl;
-                cout << "3. Shortest Path Algorithm" << endl;
-                cout << "4. Complex Algorithm" << endl;
-                cout << "5. Run Times of BFS, DFS, and IDDFS" << endl;
-                cout << "6. Quit Program" << endl;
+                if (!is_full_dataset) cout << "2. Traversals" << endl;
+                if (!is_full_dataset)  cout << "3. Shortest Path Algorithm" << endl;
+                if (!is_full_dataset) cout << "4. Complex Algorithm" << endl;
+                (is_full_dataset) ? cout << "2. Runtimes of Traversals and Searches" << endl : cout << "5. Run Times of Traversals and Searches" << endl;
+                (is_full_dataset) ? cout << "3. Quit Program" << endl : cout << "6. Quit Program" << endl;
                 cout << "Type in the number: "; 
                 int num;
                 
@@ -440,23 +440,37 @@ void Graph::start_presentation(bool is_full_dataset) {
                         current_state = Current_State::STRUCTURE;
                         break;
                     case 2:
-                        current_state = Current_State::TRAVERSALS;
+                        (is_full_dataset) ? current_state = Current_State::TIMECOMPLEXITY : current_state = Current_State::TRAVERSALS;
                         break;
                     case 3:
-                        current_state = Current_State::SHORTESTPATH;
+                        (is_full_dataset) ? current_state = Current_State::QUIT : current_state = Current_State::SHORTESTPATH;
                         break;
                     case 4:
-                        current_state = Current_State::COMPLEXALG;
+                        if (!is_full_dataset) current_state = Current_State::COMPLEXALG;
+                        else {
+                            cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
+                            num = -1;
+                            goto MENU_START;
+                        }
                         break;
                     case 5:
-                        current_state = Current_State::TIMECOMPLEXITY;
+                        if (!is_full_dataset) current_state = Current_State::TIMECOMPLEXITY;
+                        else {
+                            cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
+                            num = -1;
+                            goto MENU_START;
+                        }
                         break;
                     case 6:
-                        current_state = Current_State::QUIT;
+                        if (!is_full_dataset) current_state = Current_State::QUIT;
+                        else {
+                            cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
+                            num = -1;
+                            goto MENU_START;
+                        }
                         break;
                     default:
-                        cout << "Sorry, that command is not recognized. Try Again." << endl;
-                        cout << endl;
+                        cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
                         num = -1;
                         goto MENU_START;
                 }
@@ -665,7 +679,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 cout << "********************************" << endl << "Checking Traversal Run Times" << endl << endl;
                 current_state = Current_State::MENU;
 
-                // INITIALIZING VARIABLES
+                // INITIALIZING VARIABLES FOR TRAVERSALS
                 vector<int> path, traversal;
                 vector<bool> visited;
                 for (size_t i = 0; i < this->getSize(); i++) visited.push_back(false);
@@ -686,10 +700,63 @@ void Graph::start_presentation(bool is_full_dataset) {
                 duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
                 cout << duration << " microseconds" << endl;
 
+                cout << endl << "********************************" << endl << "Checking Search Run Times" << endl << endl;
+
+                //  Initialize start and end for search
+                int start = -1, end = -1;
+
+                // Select start value
+                while (start == -1) {
+                    cout << "**********************************" << endl << "What node do you want to start at?" << endl;
+                    cin >> start;
+                    if (cin.fail()) {
+                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        start = -1;
+                    }
+                    if (this->getOutgoingEdges(start).size() == 0) {
+                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        start = -1;
+                    }
+                }
+                
+                // Select end value
+                while (end == -1) {
+                    cout << "********************************" << endl << "What node do you want to end at?" << endl;
+                    cin >> end;
+                    if (cin.fail()) {
+                        cout << endl << "sorry, you did not input an integer " << endl << endl;
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        end = -1;
+                    }
+                    if (this->getOutgoingEdges(end).size() == 0) {
+                        cout << endl << "sorry, that vertix doesn't exist " << endl << endl;
+                        end = -1;
+                    }
+                }
+
+                // calculate time function takes for BFS Search
+                cout << endl << "Time to run BFS Search: ";
+                t1 = std::chrono::high_resolution_clock::now();
+                path = this->Search_BFS(start, end, * this);
+                t2 = std::chrono::high_resolution_clock::now();
+                duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                cout << duration << " microseconds" << endl;
+
+                // calculate time function take for DFS Search
+                cout << "Time to run DFS Search: ";
+                t1 = std::chrono::high_resolution_clock::now();
+                this->Search_DFS(start, end, * this, visited, traversal);
+                t2 = std::chrono::high_resolution_clock::now();
+                duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                cout << duration << " microseconds" << endl;
+
                 // calculate time function take for IDDFS
                 cout << "Time to run IDDFS: ";
                 t1 = std::chrono::high_resolution_clock::now();
-                vector<int> trav = iddfs(0, 23, vertices.size());
+                vector<int> trav = iddfs(start, end, vertices.size());
                 t2 = std::chrono::high_resolution_clock::now();
                 duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
                 cout << duration << " microseconds" << endl << endl;
