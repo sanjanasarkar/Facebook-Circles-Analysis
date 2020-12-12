@@ -278,9 +278,31 @@ class Graph {
          * @param g graph to be traversed.
          * @param visited vector array of bools marking if already visited
          * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
-         * @return vector of ints that represents shortest path
          */
         void DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
+
+        /**
+         * @brief BFS traversal to find shortest path from a vertex to target.
+         * 
+         * @param start starting graph vertex
+         * @param end ending graph vertex
+         * @param g graph to be traversed.
+         * @return vector of ints that represents shortest path
+         */
+        vector<int> Search_BFS(int start, int end, const Graph& g);
+
+        /**
+         * @brief DFS traversal to find shortest path from a vertex 
+         * - used to compare with Iterative Depth DFS implementation.
+         * 
+         * @param start starting graph vertex
+         * @param end ending graph vertex
+         * @param g graph to be traversed.
+         * @param visited vector array of bools marking if already visited
+         * @param dfsTraversal since its iterative return needs to be a pointer to a vector.
+         * @return vector of ints that represents shortest path
+         */
+        void Search_DFS(int start, int end, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal);
 
          /* @brief Floyd Warshall shortest path algorithm.
          * 

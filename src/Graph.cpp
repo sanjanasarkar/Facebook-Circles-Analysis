@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <algorithm>
 
 #include "Graph.h"
 
@@ -231,8 +232,44 @@ void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &d
     for (int i = 0; i < int(g.matrix_.size()); i++) {
         if (g.matrix_[start][i] == 1 && (!visited[i])) DFS(i, g, visited, dfsTraversal);
     }
+}
 
-    // return dfsTraversal;
+/****************************** Basic Search Functions ******************************/
+vector<int> Graph::Search_BFS(int start, int end, const Graph& g) {
+    vector<bool> visited(g.matrix_.size(), false);
+    vector<int> queue, traversal;
+    int vs;
+
+    queue.push_back(start);
+
+    visited[start] = true;
+
+    while (!queue.empty()) {
+        vs = queue[0];
+
+        traversal.push_back(vs);
+        if (vs == end) return traversal;
+        queue.erase(queue.begin());
+
+        for (int i = 0; i < int(g.matrix_.size()); i++) {
+            if (g.matrix_[vs][i] == 1 && (!visited[i])) {
+                queue.push_back(i);
+                visited[i] = true;
+            }
+        }
+    }
+
+    return traversal;
+}
+
+void Graph::Search_DFS(int start, int end, const Graph& g, vector<bool> &visited, vector<int> &dfsTraversal) {
+    if(find(dfsTraversal.begin(), dfsTraversal.end(), end) != dfsTraversal.end()) return;
+    dfsTraversal.push_back(start);
+    visited[start] = true;
+    if (start == end) return;
+    for (int i = 0; i < int(g.matrix_.size()); i++) {
+        if (g.matrix_[start][i] == 1 && (!visited[i]) && start != end) Search_DFS(i, end, g, visited, dfsTraversal);
+    }
 }
 
 /****************************** Shortest Path Alg Functions ******************************/
