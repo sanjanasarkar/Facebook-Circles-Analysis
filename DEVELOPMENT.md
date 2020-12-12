@@ -22,4 +22,4 @@ Over the past few days we implemented the iterative-deepening DFS. This method s
 
 # WEEK 3:
 
-The Graph class received some small modifications, including a few extra helper functions to help with some of the other algorithms. We also began developing our tests, and testing the Graph functionality found a few small bugs which were easily remedied.
+The Graph class received some small modifications, including a few extra helper functions to help with some of the other algorithms. We also began developing our tests, and testing the Graph functionality found a few small bugs which were easily remedied. The BFS and DFS algorithms were fully implemented and tested, along with the Floyd-Warshall shortest (and longest) path algorithm which was also tested. We also developed a simple text-based UI for the project, so that the user can 'explore' the different algorithms, the corresponding results, and time complexities. We then developed and implemented our plan for the presentation video.
