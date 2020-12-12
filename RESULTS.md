@@ -11,6 +11,16 @@
 #### IDDFS vs DFS vs BFS
 This algorithm has the same asymptotic time complexity as BFS and DFS; however, it has higher constant factors so in practice it is slower than both. While implementing it, we had expected IDDFS to be a lot faster than it was; we thought that since the graph is relatively well-connected with a low maximum depth of 8, it would be faster than BFS. However, we discovered that DFS was far and away the fastest at usually less than 100 microseconds for the full dataset. It was followed by BFS, and then IDDFS could take almost a minute. In some cases IDDFS was actually faster than BFS. This seemed to happen when there was a shorter path between nodes. We figured that BFS and IDDFS should have similar time complexities with smaller connections (which we found to generally be true). However bigger datasets and more complex connections add up in calculating the time complexity which causes it to be longer. We realized that IDDFS is more useful for a tree, because having cycles in the graph slows it down considerably. This could easily be solved with a visited array, but then this would take more memory, at which point IDDFS loses it advantage. The main advantage of IDDFS over BFS and DFS is that it has much lower space complexity, and unlike DFS it will work better on 'infinite' datasets.
 
+Here are some runtimes we got in different scenarios to refer to:
+
+| Type of Function | Small Dataset Runtime | Full Dataset Shorter Path Runtime | Full Dataset Longer Path Runtime|
+| ------------- | ------------- | ------------- | ------------- |
+| *BFS*  | 309 µs  | 387266 µs  | 318565 µs  |
+| *DFS*  | 198 µs  | 269239 µs  | 269239 µs  |
+| ***BFS Search***  | **224 µs**  | **36119 µs**  |  **282288 µs**  |
+| *DFS Search*  | 0 µs  | 4 µs  | 22 µs  |
+| ***IDDFS***  | **22 µs**  | **4628 µs**  | **69655516 µs**  |
+
 ### Floyd-Warshall Shortest Path Algorithm
 
 #### The Time Complexity
