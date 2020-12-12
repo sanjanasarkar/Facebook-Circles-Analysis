@@ -121,7 +121,6 @@ TEST_CASE("Simple Graph Function test", "[graph][functions][directed]") {
 TEST_CASE("Simple BFS test", "[graph][functions][directed]") {
 	// Setup Graph
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
-	Graph single_dir = Graph(lines, false);
 	Graph double_dir = Graph(lines, true);
 
 	// run BFS
@@ -142,10 +141,23 @@ TEST_CASE("Simple BFS test", "[graph][functions][directed]") {
 	REQUIRE(path[14] == 0);
 }
 
+TEST_CASE("Search BFS test", "[graph][functions][directed]") {
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
+	Graph double_dir = Graph(lines, true);
+
+	// run BFS
+	vector<int> path = double_dir.Search_BFS(0, 36, double_dir);
+
+	// check if BFS ran a breadth first traversal
+	REQUIRE(path.front() == 0);
+	REQUIRE(path.back() == 36);
+	REQUIRE(path.size() == 13);
+}
+
 TEST_CASE("Full BFS test", "[graph][functions][directed]") {
 	// Setup Graph
 	vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
-	Graph single_dir = Graph(lines, false);
 	Graph double_dir = Graph(lines, true);
 
 	// run BFS
@@ -168,13 +180,12 @@ TEST_CASE("Full BFS test", "[graph][functions][directed]") {
 TEST_CASE("Simple DFS test", "[graph][functions][directed]") {
 	// Setup Graph
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
-	Graph single_dir = Graph(lines, false);
 	Graph double_dir = Graph(lines, true);
 
 	// initialized what is needed for DFS Traversal
 	vector<bool> visited;
 	vector<int> traversal;
-	for (int i = 0; i < single_dir.getSize(); i++) visited.push_back(false);
+	for (int i = 0; i < double_dir.getSize(); i++) visited.push_back(false);
 
 	double_dir.DFS(0, double_dir, visited, traversal);
 
@@ -184,7 +195,7 @@ TEST_CASE("Simple DFS test", "[graph][functions][directed]") {
 	REQUIRE(traversal.size() == 18);
 
 	// reset DFS
-	for (int i = 0; i < single_dir.getSize(); i++) visited[i] = false;
+	for (int i = 0; i < double_dir.getSize(); i++) visited[i] = false;
 	traversal.clear();
 
 	// Check DFS at new starting point
@@ -197,16 +208,33 @@ TEST_CASE("Simple DFS test", "[graph][functions][directed]") {
 	REQUIRE(traversal[7] == 0);
 }
 
-TEST_CASE("FULL DFS test", "[graph][functions][directed]") {
+TEST_CASE("Search DFS test", "[graph][functions][directed]") {
 	// Setup Graph
-	vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
-	Graph single_dir = Graph(lines, false);
+	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph double_dir = Graph(lines, true);
 
 	// initialized what is needed for DFS Traversal
 	vector<bool> visited;
 	vector<int> traversal;
-	for (int i = 0; i < single_dir.getSize(); i++) visited.push_back(false);
+	for (int i = 0; i < double_dir.getSize(); i++) visited.push_back(false);
+
+	double_dir.Search_DFS(0, 36, double_dir, visited, traversal);
+
+	// Check if DFS does a depth search first traversal
+	REQUIRE(traversal.front() == 0);
+	REQUIRE(traversal.back() == 36);
+	REQUIRE(traversal.size() == 13);
+}
+
+TEST_CASE("FULL DFS test", "[graph][functions][directed]") {
+	// Setup Graph
+	vector<string> lines = FileReader::fileToVector("data/facebook_combined.txt");
+	Graph double_dir = Graph(lines, true);
+
+	// initialized what is needed for DFS Traversal
+	vector<bool> visited;
+	vector<int> traversal;
+	for (int i = 0; i < double_dir.getSize(); i++) visited.push_back(false);
 
 	double_dir.DFS(0, double_dir, visited, traversal);
 
@@ -216,7 +244,7 @@ TEST_CASE("FULL DFS test", "[graph][functions][directed]") {
 	REQUIRE(traversal.size() == 4039);
 
 	// reset DFS
-	for (int i = 0; i < single_dir.getSize(); i++) visited[i] = false;
+	for (int i = 0; i < double_dir.getSize(); i++) visited[i] = false;
 	traversal.clear();
 
 	// Check DFS at new starting point
