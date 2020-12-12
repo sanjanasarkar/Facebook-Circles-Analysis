@@ -233,12 +233,12 @@ TEST_CASE("Simple IDDFS", "[graph][functions][directed][Search][IDDFS]") {
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
 
-	vector<int> trav = g.iddfs(0, 1, 100, true);
+	vector<int> trav = g.iddfs(0, 1, 100);
 	vector<int> test = {0, 1};
 	REQUIRE(trav.size() == 2);
 	REQUIRE(trav == test);
 
-	trav = g.iddfs(0, 6, 100, true);
+	trav = g.iddfs(0, 6, 100);
 	test = {0, 2, 6};
 	REQUIRE(trav.size() == 3);
 	REQUIRE(trav == test);
@@ -248,9 +248,9 @@ TEST_CASE("Longer IDDFS", "[graph][functions][directed][Search][IDDFS]") {
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
 
-	vector<int> trav = g.iddfs(0, 99, 200, true);
-	vector<int> test = {0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 99};
-	REQUIRE(trav.size() == 12);
+	vector<int> trav = g.iddfs(0, 99, 20);
+	vector<int> test = {0, 2, 6, 7, 8, 9, 10, 11, 99};
+	REQUIRE(trav.size() == 9);
 	REQUIRE(trav == test);
 }
 
@@ -258,11 +258,11 @@ TEST_CASE("IDDFS find itself", "[graph][functions][directed][Search][IDDFS]") {
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
 
-	vector<int> trav = g.iddfs(0, 0, 100, true);
+	vector<int> trav = g.iddfs(0, 0, 20);
 	REQUIRE(trav.size() == 1);
 	REQUIRE(trav[0] == 0);
 
-	trav = g.iddfs(6, 6, 100, true);
+	trav = g.iddfs(6, 6, 20);
 	REQUIRE(trav.size() == 1);
 	REQUIRE(trav[0] == 6);
 
@@ -272,10 +272,10 @@ TEST_CASE("IDDFS find nonexistent", "[graph][functions][directed][Search][IDDFS]
 	vector<string> lines = FileReader::fileToVector("tests/test_data_abitlesssimple.txt");
 	Graph g = Graph(lines, false);
 
-	vector<int> trav = g.iddfs(0, 100, 100, true);
+	vector<int> trav = g.iddfs(0, 100, 20);
 	REQUIRE(trav.size() == 0);
 
-	trav = g.iddfs(6, 100, 100, true);
+	trav = g.iddfs(6, 100, 20);
 	REQUIRE(trav.size() == 0);
 }
 
@@ -390,12 +390,5 @@ TEST_CASE("Shortest Path test complex - double directed", "[floyd-warshall][comp
 									  };
 
 	vector<vector<double>> fw_mat = g.FloydWarshall();
-
-	vector<double> min_max_paths_expected = {1, 4};
-	vector<double> min_max_paths = g.find_min_max_paths(fw_mat);
-
-	// Check if min_max_paths function is working
-	REQUIRE(min_max_paths_expected == min_max_paths);
-
 	REQUIRE(expected == fw_mat);
 }

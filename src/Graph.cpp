@@ -144,34 +144,27 @@ std::ostream& operator<<(std::ostream& out, const Graph& g) {
 // Time complexity: O(b^d)
 // Space complexity: O(bd)
 // (b is breadth, d is depth)
-vector<int> Graph::iddfs(int start, int end, int max_depth, bool flip) {
+vector<int> Graph::iddfs(int start, int end, int max_depth) {
     
     for (int i = 1; i < max_depth; i++) {
         // init the traversal, as well as a vector that is the reverse
         vector<int> trav;
         vector<int> reverse;
 
-        vector<bool> visited(vertices.size(), false);
-
         // do the dls, go deeper if failed
-        if (dls(start, end, i, trav, visited)) {
+        if (dls(start, end, i, trav)) {
             // flip the output to have the correct order, might slow it down (not 100% needed)
-            if (flip){
-                for (int i = int(trav.size())-1; i >= 0 ; i--) {
-                    reverse.push_back(trav[i]);
-                }
-                return reverse;
+            for (int i = int(trav.size())-1; i >= 0 ; i--) {
+                reverse.push_back(trav[i]);
             }
-            return trav;
+            return reverse;
         }
     }
     return vector<int>();
 }
 
 // recursively do the depth limited search
-bool Graph::dls(int start, int end, int limit, vector<int> &path, vector<bool> &visited) {
-
-    visited[start] = true;
+bool Graph::dls(int start, int end, int limit, vector<int> &path) {
 
     // base case
     if (start == end) {
@@ -185,7 +178,7 @@ bool Graph::dls(int start, int end, int limit, vector<int> &path, vector<bool> &
     // otherwise recurse through all connected vertices
     vector<Graph::Edge> adj = getOutgoingEdges(start);
     for (unsigned i = 0; i < adj.size(); i++) {
-        if (!(visited[adj[i].end]) && dls(adj[i].end, end, limit-1, path, visited)) {
+        if (dls(adj[i].end, end, limit-1, path)) {
             path.push_back(start);
             return true;
         }
@@ -245,7 +238,7 @@ void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &d
 /****************************** Shortest Path Alg Functions ******************************/
 
 vector<vector<double>> Graph::FloydWarshall() {
-    int INF = __INT_MAX__;
+    int INFINITY = __INT_MAX__;
     int num_vertices = getSize();
     int n = num_vertices;
     vector<vector<double>> floyd_warsh_matrix(n, vector<double>(n, 0.0));
@@ -259,7 +252,7 @@ vector<vector<double>> Graph::FloydWarshall() {
             } else if (i == j) { // Check if vertex points to self (e.g. Vertex A to Vertex A)
                 floyd_warsh_matrix[i][j] = 0.0;
             } else { // Set pairs with no relationship to infinity
-                floyd_warsh_matrix[i][j] = INF;
+                floyd_warsh_matrix[i][j] = INFINITY;
             }
         }
     }
@@ -615,7 +608,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 }
                 cout << endl;
 
-                vector<int> trav = iddfs(start, end, 20, true);
+                vector<int> trav = iddfs(start, end, 20);
 
                 cout << "**********************************" << endl;
 
@@ -659,7 +652,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 // calculate time function take for IDDFS
                 cout << "Time to run IDDFS: ";
                 t1 = std::chrono::high_resolution_clock::now();
-                vector<int> trav = iddfs(0, -1, vertices.size(), false);
+                vector<int> trav = iddfs(0, 23, vertices.size());
                 t2 = std::chrono::high_resolution_clock::now();
                 duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
                 cout << duration << " microseconds" << endl << endl;

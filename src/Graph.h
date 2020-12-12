@@ -246,10 +246,9 @@ class Graph {
          * @param start Starting Vertex
          * @param end End Vertex
          * @param max_depth Maximum depth to search to
-         * @param flip whether or not to flip the output vector for ease of use/aesthetics
          * @return vector<int> of the path taken by the search
          */
-        vector<int> iddfs(int start, int end, int max_depth, bool flip);
+        vector<int> iddfs(int start, int end, int max_depth);
 
         /**
          * @brief Helper function for the IDDFS, recursivly does a depth-limited search
@@ -258,10 +257,9 @@ class Graph {
          * @param end End Vertex
          * @param limit Maximum depth for depth-limited search
          * @param path Vector of Vertices traversed by the search
-         * @param visited vector of booleans to see what nodes have been visited
          * @return bool of if it was successful
          */
-        bool dls(int start, int end, int limit, vector<int> &path, vector<bool> &visited);
+        bool dls(int start, int end, int limit, vector<int> &path);
 
         /**
          * @brief BFS traversal to find shortest path from a vertex.
@@ -319,15 +317,6 @@ class Graph {
          */
         void start_presentation(bool is_full_dataset);
 
-        /**
-         * @brief Helper function: Finds smallest and largest lengths of paths in graph
-         * 
-         * @param mat Matrix
-         * 
-         * @return vector<double> contains min path length and max path length in indices 0 and 1 respectively
-         */
-        vector<double> find_min_max_paths(const vector<vector<double>> fw_matrix);
-
     private:
         /**
          * @brief Adjacency matrix
@@ -354,4 +343,13 @@ class Graph {
          * 2->0 and 3->1 edges also. If false, no change to default behavior).
          */
         void __init(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
+
+        /**
+         * @brief Helper function: Finds smallest and largest lengths of paths in graph
+         * 
+         * @param mat Matrix
+         * 
+         * @return vector<double> contains min path length and max path length in indices 0 and 1 respectively
+         */
+        vector<double> find_min_max_paths(const vector<vector<double>> fw_matrix);
 };
