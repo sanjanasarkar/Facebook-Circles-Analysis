@@ -754,7 +754,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 // calculate time function take for IDDFS
                 cout << "Time to run IDDFS: ";
                 t1 = std::chrono::high_resolution_clock::now();
-                vector<int> trav = iddfs(start, end, vertices.size());
+                vector<int> trav = iddfs(start, end, 8);
                 t2 = std::chrono::high_resolution_clock::now();
                 duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
                 cout << duration << " microseconds" << endl << endl;
