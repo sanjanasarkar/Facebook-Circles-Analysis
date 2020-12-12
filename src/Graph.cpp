@@ -518,9 +518,7 @@ void Graph::start_presentation(bool is_full_dataset) {
                 }
 
                 // display vertices
-                cout << "Vertices in graph:  " << endl;
-                for(unsigned i : vertices) cout << i << " ";
-                cout << endl;
+                cout << "Vertices in graph range from: 0 to " << this -> getMaxVertex() << endl;
 
                 // select starting node thats in the graph
                 while (start == -1) {
@@ -606,19 +604,9 @@ void Graph::start_presentation(bool is_full_dataset) {
                 /************* COMPLEXALG OUTPUT HERE *************/
                 cout << "********************************" << endl << "Complex Alg - IDDFS" << endl << endl;
                 current_state = Current_State::MENU;
-                //vector<int> trav;
-                // if (vertices.size() > 5) {
-                //     trav = iddfs(0, 6, 200);
-                // } else {
-                //     trav = iddfs(0, 3, 200);
-                // }
                 
-                cout << "Vertices in graph:  ";
-                //cout << int(vertices.size());
-                for(unsigned i : vertices) {
-                    cout << i << " ";
-                }
-                cout << endl;
+                // display vertices
+                cout << "Vertices in graph range from: 0 to " << this -> getMaxVertex() << endl;
 
                 int start = -1;
                 int end = -1;
