@@ -419,11 +419,11 @@ void Graph::start_presentation(bool is_full_dataset) {
                 cout << "**********************************" << endl;
                 cout << "What would you like to see?"  << endl;
                 cout << "1. Graph Structure" << endl;
-                if (!is_full_dataset) cout << "2. Traversals" << endl;
-                if (!is_full_dataset)  cout << "3. Shortest Path Algorithm" << endl;
+                (is_full_dataset) ? cout << "2. Traversals (note that result will show a fairly long output)" << endl : cout << "2. Traversals" << endl;
+                if (!is_full_dataset) cout << "3. Shortest Path Algorithm" << endl;
                 if (!is_full_dataset) cout << "4. Complex Algorithm" << endl;
-                (is_full_dataset) ? cout << "2. Runtimes of Traversals and Searches" << endl : cout << "5. Run Times of Traversals and Searches" << endl;
-                (is_full_dataset) ? cout << "3. Quit Program" << endl : cout << "6. Quit Program" << endl;
+                (is_full_dataset) ? cout << "3. Runtimes of Traversals and Searches" << endl : cout << "5. Run Times of Traversals and Searches" << endl;
+                (is_full_dataset) ? cout << "4. Quit Program" << endl : cout << "6. Quit Program" << endl;
                 cout << "Type in the number: "; 
                 int num;
                 
@@ -440,18 +440,13 @@ void Graph::start_presentation(bool is_full_dataset) {
                         current_state = Current_State::STRUCTURE;
                         break;
                     case 2:
-                        (is_full_dataset) ? current_state = Current_State::TIMECOMPLEXITY : current_state = Current_State::TRAVERSALS;
+                        current_state = Current_State::TRAVERSALS;
                         break;
                     case 3:
-                        (is_full_dataset) ? current_state = Current_State::QUIT : current_state = Current_State::SHORTESTPATH;
+                        (is_full_dataset) ? current_state = Current_State::TIMECOMPLEXITY : current_state = Current_State::SHORTESTPATH;
                         break;
                     case 4:
-                        if (!is_full_dataset) current_state = Current_State::COMPLEXALG;
-                        else {
-                            cout << "Sorry, that command is not recognized. Try Again." << endl << endl;
-                            num = -1;
-                            goto MENU_START;
-                        }
+                        (is_full_dataset) ? current_state = Current_State::QUIT : current_state = Current_State::COMPLEXALG;
                         break;
                     case 5:
                         if (!is_full_dataset) current_state = Current_State::TIMECOMPLEXITY;
