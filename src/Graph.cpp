@@ -499,8 +499,9 @@ void Graph::start_presentation(bool is_full_dataset) {
 
                 // choose traversal
                 cin >> selector;
-                if (cin.fail()) {
-                    cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
+                if (cin.fail() || selector > 2 || selector < 1) {
+                    if (selector > 2 || selector < 1) cout << endl << "That command is not recognized. Try Again. " << endl << endl;
+                    else cout << endl << "Sorry, you did not input an integer. Try Again. " << endl << endl;
                     cin.clear();
                     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     break;
