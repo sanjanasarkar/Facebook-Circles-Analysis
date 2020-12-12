@@ -2,6 +2,7 @@
 1. Graph Creation
 2. Traversals
 3. Floyd-Warshall Shortest Path Algorithm
+4. Next Steps
 
 ## Conclusions
 
@@ -13,10 +14,11 @@ This algorithm has the same asymptotic time complexity as BFS and DFS; however, 
 ### Floyd-Warshall Shortest Path Algorithm
 
 #### The Time Complexity
-
-Floyd-Warshall is a powerful algorithm, but in the process of completing our project we found that it is also one of the slowest. Floyd-Warshall has a runtime complexity of O(n^3). With the Facebook dataset's 4093 nodes it would take approximately 18 million hours (760,000 days) to run. Hmm...
+Floyd-Warshall is a powerful algorithm, but in the process of completing our project we found that it is also one of the slowest. Floyd-Warshall has a runtime complexity of O(n^3). With the Facebook dataset's 4093 nodes it would take approximately 18 million hours (760,000 days) to run. Yikes!
 #### The Power of This Algorithm
-When we applied Floyd-Warshall to smaller subsets of data, it worked like a charm. On these smaller datasets, it can quickly determine the shortest and longest paths within the smaller graphs.
+When we applied Floyd-Warshall to smaller subsets of data, it worked like a charm. On these smaller datasets, it can quickly determine the shortest and longest paths that exist in the graph. Not only does this mean having a better understanding of individual nodes' relationships, but also better understanding the layout of the general graph. <br/>
+The ability to get a general overview of the graph is very valuable because it reveals other details about the graph (e.g. detecting negative edge weight cycles, transitive closure, and more). This is why Floyd-Warshall is typically worth the high computational cost. <br>
+The Floyd-Warshall matrix revealed a very interesting finding: Most of the node relationships in the graph were of length 1 or 2. The longest path we found is of size 8 on a double-directed graph.  
 
 ## More Additions
 ### Better UI
