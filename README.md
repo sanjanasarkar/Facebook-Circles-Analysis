@@ -1,7 +1,7 @@
 # Facebook Graph Data Set Analysis
 ## created by : bx3, pranavg4, shivenk2, & ssarkar8
 
-(YouTube Presentation & Short Demo)[https://youtu.be/oM6CiahnjPA]
+[YouTube Presentation & Short Demo](https://youtu.be/oM6CiahnjPA)
 
 ### Instructions:
 
