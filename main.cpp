@@ -91,44 +91,4 @@ int main() {
     bool double_directed = double_dir - 1;
     Graph g(lines, double_directed);
     g.start_presentation(is_full_dataset);
-    
-
-    // // vector<Vertex> verts = g.get_vertices();
-    // // for (unsigned i = 0; i < verts.size(); i++) {
-    // //     cout << verts[i] << " ";
-    // // }
-
-    // g.print_longest_paths(fw_mat, double_directed);
-    // g.print_shortest_paths(fw_mat, double_directed);
-    // // Do some cool algorithms here guys!
-  
-    // //std::cout << g << std::endl;
-    // //std::cout << f;
-    // std::cout << g.getSize() << std::endl;
-
-    // std::cout << " 1  ";
-    // // iddfs basic test
-    // vector<int> trav = g.iddfs(0, 341, 300, g);
-
-    // for (int i = 0; i < int(trav.size()); i++) {
-    //     std::cout << trav[i] << " ";
-    // }
-    // std::cout << "\n";
-
-    // // iddfs advanced test
-
-    // int max = 250;
-
-    // for (int i = 0; i < max; i++) {
-    //     for (int j = 0; j < max; j++) {
-    //         std::cout << i << " -> " << j << " :  ";
-
-    //         vector<int> trav = g.iddfs(i, j, 300, g);
-
-    //         for (int i = 0; i < int(trav.size()); i++) {
-    //             std::cout << trav[i] << " ";
-    //         }
-    //         printf("\n");
-    //     }
-    // }
 }

@@ -563,6 +563,7 @@ void Graph::start_presentation(bool is_full_dataset) {
             }
             case Current_State::SHORTESTPATH: {
                 /************* SHORTEST PATH OUTPUT HERE *************/
+                cout << "****************************************" << endl;
                 cout << "Shortest Path - Floyd-Warshall Algorithm" << endl;
                 cout << endl;
 
