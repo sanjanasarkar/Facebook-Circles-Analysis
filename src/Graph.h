@@ -246,9 +246,10 @@ class Graph {
          * @param start Starting Vertex
          * @param end End Vertex
          * @param max_depth Maximum depth to search to
+         * @param flip whether or not to flip the output vector for ease of use/aesthetics
          * @return vector<int> of the path taken by the search
          */
-        vector<int> iddfs(int start, int end, int max_depth);
+        vector<int> iddfs(int start, int end, int max_depth, bool flip);
 
         /**
          * @brief Helper function for the IDDFS, recursivly does a depth-limited search
@@ -257,9 +258,10 @@ class Graph {
          * @param end End Vertex
          * @param limit Maximum depth for depth-limited search
          * @param path Vector of Vertices traversed by the search
+         * @param visited vector of booleans to see what nodes have been visited
          * @return bool of if it was successful
          */
-        bool dls(int start, int end, int limit, vector<int> &path);
+        bool dls(int start, int end, int limit, vector<int> &path, vector<bool> &visited);
 
         /**
          * @brief BFS traversal to find shortest path from a vertex.
