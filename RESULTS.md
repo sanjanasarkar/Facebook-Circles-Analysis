@@ -6,7 +6,7 @@ This algorithm has the same asymptotic time complexity as BFS and DFS; however, 
 
 ## 2. Floyd-Warshall Shortest Path Algorithm
 ##### The Time Complexity
-Floyd-Warshall is a powerful algorithm, but in the process of completing our project we found that it is also one of the slowest. Floyd-Warshall has a runtime complexity of O(n^3). With the Facebook dataset's 4093 nodes it would take approximately 18 million hours (760,000 days) to run. Hmm...
+Floyd-Warshall is a powerful algorithm, but in the process of completing our project we found that it is also one of the slowest. Floyd-Warshall has a runtime complexity of O(n<sup>3</sup>). With the Facebook dataset's 4093 nodes it would take approximately 18 million hours (760,000 days) to run. Hmm...
 ##### The Power of This Algorithm
 When we applied Floyd-Warshall to smaller subsets of data, it worked like a charm. On these smaller datasets, it can quickly determine the shortest and longest paths within the smaller graphs.
 
