@@ -1,5 +1,5 @@
 # Facebook Graph Data Set Analysis
-## created by : pranavg4, bx3, shivenk2, & ssarkar8
+## created by : bx3, pranavg4, shivenk2, & ssarkar8
 
 ### Instructions:
 

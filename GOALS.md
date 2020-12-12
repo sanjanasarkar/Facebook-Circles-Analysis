@@ -15,7 +15,7 @@ We chose the BFS traversal because it would allow us to easily display friends i
 
 ### Algorithm #1: Shortest Path: Floyd-Warshall Algorithm
 
-This algorithm will be used to find the shortest path and degrees of separation between any two people in the graph/social network. It is O(n^3), but because we are planning on using an adjacency matrix, we have fast lookups.
+This algorithm will be used to find the shortest path and degrees of separation between every pair of people in the graph/social network. It is O(n^3), but because we are planning on using an adjacency matrix, we have fast lookups. This algorithm gives us a lot of information about the entire graph, making it easy to notice relationships between people.
 
 ### Algorithm #2 (Complex): Google Page Rank Algorithm
 
