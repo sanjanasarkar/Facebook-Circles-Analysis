@@ -390,5 +390,12 @@ TEST_CASE("Shortest Path test complex - double directed", "[floyd-warshall][comp
 									  };
 
 	vector<vector<double>> fw_mat = g.FloydWarshall();
+
+	vector<double> min_max_paths_expected = {1, 4};
+	vector<double> min_max_paths = g.find_min_max_paths(fw_mat);
+
+	// Check if min_max_paths function is working
+	REQUIRE(min_max_paths_expected == min_max_paths);
+
 	REQUIRE(expected == fw_mat);
 }

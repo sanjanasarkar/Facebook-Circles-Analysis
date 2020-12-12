@@ -317,6 +317,15 @@ class Graph {
          */
         void start_presentation(bool is_full_dataset);
 
+        /**
+         * @brief Helper function: Finds smallest and largest lengths of paths in graph
+         * 
+         * @param mat Matrix
+         * 
+         * @return vector<double> contains min path length and max path length in indices 0 and 1 respectively
+         */
+        vector<double> find_min_max_paths(const vector<vector<double>> fw_matrix);
+
     private:
         /**
          * @brief Adjacency matrix
@@ -343,13 +352,4 @@ class Graph {
          * 2->0 and 3->1 edges also. If false, no change to default behavior).
          */
         void __init(const vector<Edge>& edges, size_t num_nodes, bool double_directed);
-
-        /**
-         * @brief Helper function: Finds smallest and largest lengths of paths in graph
-         * 
-         * @param mat Matrix
-         * 
-         * @return vector<double> contains min path length and max path length in indices 0 and 1 respectively
-         */
-        vector<double> find_min_max_paths(const vector<vector<double>> fw_matrix);
 };

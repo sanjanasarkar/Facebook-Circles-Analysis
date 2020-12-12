@@ -238,7 +238,7 @@ void Graph::DFS(int start, const Graph& g, vector<bool> &visited, vector<int> &d
 /****************************** Shortest Path Alg Functions ******************************/
 
 vector<vector<double>> Graph::FloydWarshall() {
-    int INFINITY = __INT_MAX__;
+    int INF = __INT_MAX__;
     int num_vertices = getSize();
     int n = num_vertices;
     vector<vector<double>> floyd_warsh_matrix(n, vector<double>(n, 0.0));
@@ -252,7 +252,7 @@ vector<vector<double>> Graph::FloydWarshall() {
             } else if (i == j) { // Check if vertex points to self (e.g. Vertex A to Vertex A)
                 floyd_warsh_matrix[i][j] = 0.0;
             } else { // Set pairs with no relationship to infinity
-                floyd_warsh_matrix[i][j] = INFINITY;
+                floyd_warsh_matrix[i][j] = INF;
             }
         }
     }
